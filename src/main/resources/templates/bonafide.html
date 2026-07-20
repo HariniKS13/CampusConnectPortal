@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bonafide Certificate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>SRI SHAKTHI INSTITUTE OF ENGINEERING AND TECHNOLOGY</h1>
+    <h2>Bonafide Certificate Application</h2>
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/bonafide">Bonafide</a>
+    <a href="/leave">Leave</a>
+    <a href="/notices">Notices</a>
+</nav>
+
+<section>
+
+    <h2>Apply for Bonafide Certificate</h2>
+
+    <form action="/bonafide" method="post">
+
+        <label>Student Name</label><br><br>
+        <input type="text" name="studentName" placeholder="Enter your name" required><br><br>
+
+        <label>Register Number</label><br><br>
+        <input type="text" name="regNo" placeholder="Enter register number" required><br><br>
+
+        <label>Department</label><br><br>
+        <select name="department" required>
+            <option value="">Select Department</option>
+            <option>CSE</option>
+            <option>IT</option>
+            <option>ECE</option>
+            <option>EEE</option>
+            <option>MECH</option>
+            <option>CIVIL</option>
+        </select><br><br>
+
+        <label>Year</label><br><br>
+        <select name="year" required>
+            <option value="">Select Year</option>
+            <option>I Year</option>
+            <option>II Year</option>
+            <option>III Year</option>
+            <option>IV Year</option>
+        </select><br><br>
+
+        <label>Reason</label><br><br>
+        <textarea name="reason" rows="5" cols="40" placeholder="Enter the reason" required></textarea>
+        <br><br>
+
+        <button type="submit">Submit Application</button>
+
+    </form>
+
+    <br>
+
+    <button type="button" onclick="window.location.href='/'">
+        Back to Home
+    </button>
+
+</section>
+
+<footer>
+    <p>© 2026 Sri Shakthi Institute of Engineering and Technology</p>
+</footer>
+
+</body>
+</html>

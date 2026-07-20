@@ -1,0 +1,106 @@
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f4f4f4;
+}
+
+header{
+    background:#003366;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+nav{
+    background:#0055a5;
+    text-align:center;
+    padding:15px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:20px;
+    font-weight:bold;
+}
+
+section{
+    width:80%;
+    margin:auto;
+    text-align:center;
+    padding:30px;
+}
+
+.card{
+    background:white;
+    margin:20px;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px gray;
+}
+
+button{
+    background:#003366;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0066cc;
+}
+
+footer{
+    background:#003366;
+    color:white;
+    text-align:center;
+    padding:15px;
+    margin-top:30px;
+}
+form{
+    background:white;
+    width:50%;
+    margin:auto;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px gray;
+}
+
+input,
+select,
+textarea{
+    width:90%;
+    padding:10px;
+    border:1px solid gray;
+    border-radius:5px;
+}
+
+button{
+    padding:10px 20px;
+    background:#003366;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0055aa;
+}
+.banner{
+    background:#e6f2ff;
+    text-align:center;
+    padding:40px 20px;
+}
+
+.banner h2{
+    color:#003366;
+    margin-bottom:10px;
+}
+
+.banner p{
+    font-size:18px;
+    color:#444;
+}
