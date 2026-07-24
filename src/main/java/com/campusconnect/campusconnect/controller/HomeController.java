@@ -27,6 +27,11 @@ public class HomeController {
         return "bonafide";
     }
 
+    @PostMapping("/bonafide")
+    public String submitBonafide() {
+        return "success";
+    }
+
     @GetMapping("/notices")
     public String notices() {
         return "notices";
@@ -35,9 +40,5 @@ public class HomeController {
     @GetMapping("/success")
     public String success() {
         return "success";
-    }
-    @PostMapping("/bonafide")
-    public String submitBonafide() {
-    return "success";
     }
 }
