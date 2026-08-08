@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <h2>Staff Login</h2>
+
+    <form action="/staff/login" method="post">
+
+        <label>Staff Email</label><br><br>
+        <input type="email" name="email"
+               placeholder="Enter staff email" required><br><br>
+
+        <label>Password</label><br><br>
+        <input type="password" name="password"
+               placeholder="Enter password" required><br><br>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <br>
+
+    <button type="button" onclick="window.location.href='/'">
+        Back to Home
+    </button>
+
+</body>
+
+</html>

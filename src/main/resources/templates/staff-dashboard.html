@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <h1>Staff Dashboard</h1>
+
+    <h2>Pending Student Requests</h2>
+
+    <div th:if="${#lists.isEmpty(requests)}">
+        <p>No pending requests.</p>
+    </div>
+
+    <div th:each="request : ${requests}">
+
+        <hr>
+
+        <h3 th:text="${request.requestType}">Request Type</h3>
+
+        <p>
+            <strong>Student Name:</strong>
+            <span th:text="${request.studentName}"></span>
+        </p>
+
+        <p>
+            <strong>Register Number:</strong>
+            <span th:text="${request.regNo}"></span>
+        </p>
+
+        <p>
+            <strong>Department:</strong>
+            <span th:text="${request.department}"></span>
+        </p>
+
+        <p>
+            <strong>Year:</strong>
+            <span th:text="${request.year}"></span>
+        </p>
+
+        <p>
+            <strong>Reason:</strong>
+            <span th:text="${request.reason}"></span>
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            <span th:text="${request.status}"></span>
+        </p>
+
+    </div>
+
+    <br>
+
+    <button type="button" onclick="window.location.href='/'">
+        Logout
+    </button>
+
+</body>
+
+</html>
