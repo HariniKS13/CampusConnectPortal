@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Dashboard</title>
+    <title>Staff Dashboard - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 
@@ -22,7 +21,9 @@
 
         <hr>
 
-        <h3 th:text="${request.requestType}">Request Type</h3>
+        <h3 th:text="${request.requestType}">
+            Request Type
+        </h3>
 
         <p>
             <strong>Student Name:</strong>
@@ -50,9 +51,35 @@
         </p>
 
         <p>
+            <strong>From Date:</strong>
+            <span th:text="${request.fromDate}"></span>
+        </p>
+
+        <p>
+            <strong>To Date:</strong>
+            <span th:text="${request.toDate}"></span>
+        </p>
+
+        <p>
             <strong>Status:</strong>
             <span th:text="${request.status}"></span>
         </p>
+
+        <!-- APPROVE BUTTON -->
+        <form action="/staff/approve" method="post">
+            <input type="hidden" name="id" th:value="${request.id}">
+            <button type="submit">
+                Approve
+            </button>
+        </form>
+
+        <!-- REJECT BUTTON -->
+        <form action="/staff/reject" method="post">
+            <input type="hidden" name="id" th:value="${request.id}">
+            <button type="submit">
+                Reject
+            </button>
+        </form>
 
     </div>
 
@@ -63,5 +90,4 @@
     </button>
 
 </body>
-
 </html>

@@ -63,8 +63,6 @@ public class HomeController {
         request.setFromDate(fromDate);
         request.setToDate(toDate);
         request.setReason(reason);
-
-        // New requests are pending
         request.setStatus("PENDING");
 
         repository.save(request);
@@ -101,8 +99,6 @@ public class HomeController {
         request.setDepartment(department);
         request.setYear(year);
         request.setReason(reason);
-
-        // New requests are pending
         request.setStatus("PENDING");
 
         repository.save(request);
@@ -152,17 +148,14 @@ public class HomeController {
 
         if (email.equals(staffEmail) && password.equals(staffPassword)) {
 
-            // Get all pending requests
             List<StudentRequest> requests =
                     repository.findByStatus("PENDING");
 
-            // Send requests to staff dashboard
             model.addAttribute("requests", requests);
 
             return "staff-dashboard";
         }
 
-        // Wrong login
         model.addAttribute("error", "Invalid email or password");
 
         return "staff-login";

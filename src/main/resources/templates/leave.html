@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leave Application</title>
+    <title>Leave Application - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 
@@ -14,36 +13,85 @@
 
     <form action="/leave" method="post">
 
-        <label>Student Name</label><br><br>
-        <input type="text" name="studentName" required><br><br>
+        <label for="studentName">Student Name</label>
+        <br><br>
+        <input
+            type="text"
+            id="studentName"
+            name="studentName"
+            placeholder="Enter your name"
+            required>
+        <br><br>
 
-        <label>Register Number</label><br><br>
-        <input type="text" name="regNo" required><br><br>
+        <label for="regNo">Register Number</label>
+        <br><br>
+        <input
+            type="text"
+            id="regNo"
+            name="regNo"
+            placeholder="Enter register number"
+            required>
+        <br><br>
 
-        <label>Department</label><br><br>
-        <select name="department" required>
+        <label for="department">Department</label>
+        <br><br>
+
+        <select id="department" name="department" required>
             <option value="">-- Select Department --</option>
-            <option>CSE</option>
-            <option>IT</option>
-            <option>ECE</option>
-            <option>EEE</option>
-            <option>MECH</option>
-            <option>CIVIL</option>
-            <option>AIDS</option>
-            <option>VLSI</option>
-        </select><br><br>
+            <option value="CSE">CSE</option>
+            <option value="IT">IT</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+            <option value="MECH">MECH</option>
+            <option value="CIVIL">CIVIL</option>
+            <option value="AIDS">AIDS</option>
+            <option value="VLSI">VLSI</option>
+        </select>
 
-        <label>Year</label><br><br>
-        <input type="text" name="year" required><br><br>
+        <br><br>
 
-        <label>From Date</label><br><br>
-        <input type="date" name="fromDate" required><br><br>
+        <label for="year">Year</label>
+        <br><br>
 
-        <label>To Date</label><br><br>
-        <input type="date" name="toDate" required><br><br>
+        <select id="year" name="year" required>
+            <option value="">-- Select Year --</option>
+            <option value="I Year">I Year</option>
+            <option value="II Year">II Year</option>
+            <option value="III Year">III Year</option>
+            <option value="IV Year">IV Year</option>
+        </select>
 
-        <label>Reason</label><br><br>
-        <textarea name="reason" rows="5" placeholder="Enter your reason" required></textarea><br><br>
+        <br><br>
+
+        <label for="fromDate">From Date</label>
+        <br><br>
+        <input
+            type="date"
+            id="fromDate"
+            name="fromDate"
+            required>
+        <br><br>
+
+        <label for="toDate">To Date</label>
+        <br><br>
+        <input
+            type="date"
+            id="toDate"
+            name="toDate"
+            required>
+        <br><br>
+
+        <label for="reason">Reason</label>
+        <br><br>
+
+        <textarea
+            id="reason"
+            name="reason"
+            rows="5"
+            placeholder="Enter your reason"
+            required></textarea>
+
+        <br><br>
 
         <button type="submit">Submit Leave Request</button>
 
@@ -56,5 +104,4 @@
     </button>
 
 </body>
-
 </html>
