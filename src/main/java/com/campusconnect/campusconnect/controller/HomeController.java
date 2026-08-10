@@ -20,27 +20,15 @@ public class HomeController {
         this.repository = repository;
     }
 
-    // =========================
-    // HOME PAGE
-    // =========================
-
     @GetMapping("/")
     public String home() {
         return "index";
     }
 
-    // =========================
-    // LEAVE PAGE
-    // =========================
-
     @GetMapping("/leave")
     public String leave() {
         return "leave";
     }
-
-    // =========================
-    // SUBMIT LEAVE REQUEST
-    // =========================
 
     @PostMapping("/leave")
     public String submitLeave(
@@ -69,18 +57,10 @@ public class HomeController {
         return "success";
     }
 
-    // =========================
-    // BONAFIDE PAGE
-    // =========================
-
     @GetMapping("/bonafide")
     public String bonafide() {
         return "bonafide";
     }
-
-    // =========================
-    // SUBMIT BONAFIDE REQUEST
-    // =========================
 
     @PostMapping("/bonafide")
     public String submitBonafide(
@@ -105,18 +85,10 @@ public class HomeController {
         return "success";
     }
 
-    // =========================
-    // NOTICES PAGE
-    // =========================
-
     @GetMapping("/notices")
     public String notices() {
         return "notices";
     }
-
-    // =========================
-    // SUCCESS PAGE
-    // =========================
 
     @GetMapping("/success")
     public String success() {
@@ -124,25 +96,23 @@ public class HomeController {
     }
 
     // =========================
-    // STUDENT STATUS PAGE
+    // STUDENT STATUS
     // =========================
 
     @GetMapping("/status")
-    public String statusPage() {
+    public String statusPage(Model model) {
+        model.addAttribute("requests", null);
+        model.addAttribute("regNo", null);
         return "status";
     }
 
-    // =========================
-    // CHECK STUDENT STATUS
-    // =========================
-
     @PostMapping("/status")
     public String checkStatus(
-            @RequestParam String regNo,
+            @RequestParam("regNo") String regNo,
             Model model) {
 
         List<StudentRequest> requests =
-                repository.findByRegNo(regNo);
+                repository.findByRegNo(regNo.trim());
 
         model.addAttribute("requests", requests);
         model.addAttribute("regNo", regNo);
@@ -151,17 +121,13 @@ public class HomeController {
     }
 
     // =========================
-    // STAFF LOGIN PAGE
+    // STAFF LOGIN
     // =========================
 
     @GetMapping("/staff/login")
     public String staffLogin() {
         return "staff-login";
     }
-
-    // =========================
-    // STAFF LOGIN
-    // =========================
 
     @PostMapping("/staff/login")
     public String staffLoginSubmit(
@@ -172,8 +138,7 @@ public class HomeController {
         String staffEmail = "dhilipkumarece@siet.ac.in";
         String staffPassword = "DilipHODVLSI@2028";
 
-        if (email.equals(staffEmail)
-                && password.equals(staffPassword)) {
+        if (staffEmail.equals(email) && staffPassword.equals(password)) {
 
             List<StudentRequest> requests =
                     repository.findByStatus("PENDING");
@@ -183,57 +148,42 @@ public class HomeController {
             return "staff-dashboard";
         }
 
-        model.addAttribute(
-                "error",
-                "Invalid email or password"
-        );
+        model.addAttribute("error", "Invalid email or password");
 
         return "staff-login";
     }
 
     // =========================
-    // APPROVE REQUEST
+    // APPROVE
     // =========================
 
     @PostMapping("/staff/approve")
-    public String approveRequest(
-            @RequestParam Long id) {
+    public String approveRequest(@RequestParam("id") Long id) {
 
-        if (id != null) {
+        StudentRequest request =
+                repository.findById(id).orElse(null);
 
-            StudentRequest request =
-                    repository.findById(id).orElse(null);
-
-            if (request != null) {
-
-                request.setStatus("APPROVED");
-
-                repository.save(request);
-            }
+        if (request != null) {
+            request.setStatus("APPROVED");
+            repository.save(request);
         }
 
         return "redirect:/staff/login";
     }
 
     // =========================
-    // REJECT REQUEST
+    // REJECT
     // =========================
 
     @PostMapping("/staff/reject")
-    public String rejectRequest(
-            @RequestParam Long id) {
+    public String rejectRequest(@RequestParam("id") Long id) {
 
-        if (id != null) {
+        StudentRequest request =
+                repository.findById(id).orElse(null);
 
-            StudentRequest request =
-                    repository.findById(id).orElse(null);
-
-            if (request != null) {
-
-                request.setStatus("REJECTED");
-
-                repository.save(request);
-            }
+        if (request != null) {
+            request.setStatus("REJECTED");
+            repository.save(request);
         }
 
         return "redirect:/staff/login";
