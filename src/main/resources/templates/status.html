@@ -1,45 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Check Status - CampusConnect</title>
 
     <link rel="stylesheet" href="/style.css">
+
 </head>
 
 <body>
 
 <header>
+
     <h1>CampusConnect</h1>
-    <p>Sri Shakthi Institute of Engineering and Technology</p>
+
+    <p>
+        Sri Shakthi Institute of Engineering and Technology
+    </p>
+
 </header>
 
+
 <nav>
+
     <a href="/">Home</a>
+
     <a href="/bonafide">Bonafide</a>
+
     <a href="/leave">Leave</a>
+
     <a href="/notices">Notices</a>
+
     <a href="/status">Check Status</a>
+
     <a href="/staff/login">Staff Login</a>
+
 </nav>
 
-<div class="container">
+
+<main class="container">
 
     <h2>Check Request Status</h2>
 
-    <p>Enter your Register Number to check your request status.</p>
+    <p>
+        Enter your Register Number to check whether
+        your application is Pending, Approved, or Rejected.
+    </p>
+
+
+    <!-- STATUS SEARCH FORM -->
 
     <form action="/status" method="post">
 
-        <label>Register Number</label>
+        <label for="regNo">
+            Register Number
+        </label>
+
+        <br><br>
 
         <input
             type="text"
+            id="regNo"
             name="regNo"
             placeholder="Enter Register Number"
             required>
+
+        <br><br>
 
         <button type="submit">
             Check Status
@@ -47,58 +79,215 @@
 
     </form>
 
+
+    <!-- RESULTS -->
+
     <div th:if="${regNo != null}">
 
-        <h2>Request Details</h2>
+        <hr>
+
+        <h2>Application Status</h2>
+
+
+        <!-- NO REQUEST -->
 
         <div th:if="${#lists.isEmpty(requests)}">
 
             <p>
-                No request found for Register Number:
+                No application found for Register Number:
                 <strong th:text="${regNo}"></strong>
             </p>
 
         </div>
 
-        <div th:each="request : ${requests}">
 
-            <hr>
+        <!-- REQUESTS -->
 
-            <p>
-                <strong>Student Name:</strong>
-                <span th:text="${request.studentName}"></span>
-            </p>
+        <div th:each="request : ${requests}"
+             class="card">
 
-            <p>
-                <strong>Register Number:</strong>
-                <span th:text="${request.regNo}"></span>
-            </p>
+            <h3>
+                <span th:text="${request.requestType}">
+                    Request Type
+                </span>
+            </h3>
 
-            <p>
-                <strong>Request Type:</strong>
-                <span th:text="${request.requestType}"></span>
-            </p>
 
             <p>
-                <strong>Department:</strong>
-                <span th:text="${request.department}"></span>
+
+                <strong>
+                    Student Name:
+                </strong>
+
+                <span th:text="${request.studentName}">
+                </span>
+
             </p>
 
-            <p>
-                <strong>Year:</strong>
-                <span th:text="${request.year}"></span>
-            </p>
 
             <p>
-                <strong>Status:</strong>
-                <span th:text="${request.status}"></span>
+
+                <strong>
+                    Register Number:
+                </strong>
+
+                <span th:text="${request.regNo}">
+                </span>
+
             </p>
+
+
+            <p>
+
+                <strong>
+                    Department:
+                </strong>
+
+                <span th:text="${request.department}">
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Year:
+                </strong>
+
+                <span th:text="${request.year}">
+                </span>
+
+            </p>
+
+
+            <!-- LEAVE DATES -->
+
+            <div th:if="${request.requestType == 'LEAVE'}">
+
+                <p>
+
+                    <strong>
+                        From Date:
+                    </strong>
+
+                    <span th:text="${request.fromDate}">
+                    </span>
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        To Date:
+                    </strong>
+
+                    <span th:text="${request.toDate}">
+                    </span>
+
+                </p>
+
+            </div>
+
+
+            <p>
+
+                <strong>
+                    Reason:
+                </strong>
+
+                <span th:text="${request.reason}">
+                </span>
+
+            </p>
+
+
+            <!-- STATUS -->
+
+            <p>
+
+                <strong>
+                    Application Status:
+                </strong>
+
+                <span
+                    th:text="${request.status}">
+                </span>
+
+            </p>
+
+
+            <!-- STATUS MESSAGE -->
+
+            <div th:if="${request.status == 'PENDING'}">
+
+                <p>
+                    ⏳ Your application is waiting for
+                    staff approval.
+                </p>
+
+            </div>
+
+
+            <div th:if="${request.status == 'APPROVED'}">
+
+                <p>
+                    ✅ Your application has been approved.
+                </p>
+
+            </div>
+
+
+            <div th:if="${request.status == 'REJECTED'}">
+
+                <p>
+                    ❌ Your application has been rejected.
+                </p>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
+
+    <br>
+
+
+    <button
+        type="button"
+        onclick="window.location.href='/'">
+
+        Back to Home
+
+    </button>
+
+</main>
+
+
+<footer>
+
+    <p>
+        📍 L&amp;T Bypass Road,
+        Chinniyampalayam,
+        Coimbatore - 641062
+    </p>
+
+    <p>
+        🌐 www.siet.ac.in
+    </p>
+
+    <hr>
+
+    <p>
+        © 2026 SIET Smart Student Portal |
+        All Rights Reserved.
+    </p>
+
+</footer>
+
 
 </body>
+
 </html>

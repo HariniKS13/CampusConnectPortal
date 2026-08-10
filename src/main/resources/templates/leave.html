@@ -3,11 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Leave Application - CampusConnect</title>
+
     <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
+
+<header>
+    <h1>CampusConnect</h1>
+    <p>Sri Shakthi Institute of Engineering and Technology</p>
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/bonafide">Bonafide</a>
+    <a href="/leave">Leave</a>
+    <a href="/notices">Notices</a>
+    <a href="/status">Check Status</a>
+    <a href="/staff/login">Staff Login</a>
+</nav>
+
+<main class="container">
 
     <h2>Leave Application Form</h2>
 
@@ -15,22 +33,26 @@
 
         <label for="studentName">Student Name</label>
         <br><br>
+
         <input
             type="text"
             id="studentName"
             name="studentName"
             placeholder="Enter your name"
             required>
+
         <br><br>
 
         <label for="regNo">Register Number</label>
         <br><br>
+
         <input
             type="text"
             id="regNo"
             name="regNo"
             placeholder="Enter register number"
             required>
+
         <br><br>
 
         <label for="department">Department</label>
@@ -65,20 +87,24 @@
 
         <label for="fromDate">From Date</label>
         <br><br>
+
         <input
             type="date"
             id="fromDate"
             name="fromDate"
             required>
+
         <br><br>
 
         <label for="toDate">To Date</label>
         <br><br>
+
         <input
             type="date"
             id="toDate"
             name="toDate"
             required>
+
         <br><br>
 
         <label for="reason">Reason</label>
@@ -93,7 +119,9 @@
 
         <br><br>
 
-        <button type="submit">Submit Leave Request</button>
+        <button type="submit">
+            Submit Leave Request
+        </button>
 
     </form>
 
@@ -102,6 +130,8 @@
     <button type="button" onclick="window.location.href='/'">
         Back to Home
     </button>
+
+</main>
 
 </body>
 </html>

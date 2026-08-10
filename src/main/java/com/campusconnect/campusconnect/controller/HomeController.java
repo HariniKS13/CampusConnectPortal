@@ -8,10 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 public class HomeController {
@@ -126,7 +124,7 @@ public class HomeController {
     }
 
     // =========================
-    // STUDENT CHECK STATUS PAGE
+    // STUDENT STATUS PAGE
     // =========================
 
     @GetMapping("/status")
@@ -153,16 +151,6 @@ public class HomeController {
     }
 
     // =========================
-    // TEMPORARY STATUS TEST
-    // =========================
-
-    @GetMapping("/test-status")
-    @ResponseBody
-    public String testStatus() {
-        return "STATUS ROUTE IS WORKING";
-    }
-
-    // =========================
     // STAFF LOGIN PAGE
     // =========================
 
@@ -184,7 +172,8 @@ public class HomeController {
         String staffEmail = "dhilipkumarece@siet.ac.in";
         String staffPassword = "DilipHODVLSI@2028";
 
-        if (email.equals(staffEmail) && password.equals(staffPassword)) {
+        if (email.equals(staffEmail)
+                && password.equals(staffPassword)) {
 
             List<StudentRequest> requests =
                     repository.findByStatus("PENDING");
@@ -194,7 +183,10 @@ public class HomeController {
             return "staff-dashboard";
         }
 
-        model.addAttribute("error", "Invalid email or password");
+        model.addAttribute(
+                "error",
+                "Invalid email or password"
+        );
 
         return "staff-login";
     }
@@ -204,14 +196,20 @@ public class HomeController {
     // =========================
 
     @PostMapping("/staff/approve")
-    public String approveRequest(@RequestParam Long id) {
+    public String approveRequest(
+            @RequestParam Long id) {
 
-        StudentRequest request =
-                repository.findById(Objects.requireNonNull(id)).orElse(null);
+        if (id != null) {
 
-        if (request != null) {
-            request.setStatus("APPROVED");
-            repository.save(request);
+            StudentRequest request =
+                    repository.findById(id).orElse(null);
+
+            if (request != null) {
+
+                request.setStatus("APPROVED");
+
+                repository.save(request);
+            }
         }
 
         return "redirect:/staff/login";
@@ -222,14 +220,20 @@ public class HomeController {
     // =========================
 
     @PostMapping("/staff/reject")
-    public String rejectRequest(@RequestParam Long id) {
+    public String rejectRequest(
+            @RequestParam Long id) {
 
-        StudentRequest request =
-                repository.findById(Objects.requireNonNull(id)).orElse(null);
+        if (id != null) {
 
-        if (request != null) {
-            request.setStatus("REJECTED");
-            repository.save(request);
+            StudentRequest request =
+                    repository.findById(id).orElse(null);
+
+            if (request != null) {
+
+                request.setStatus("REJECTED");
+
+                repository.save(request);
+            }
         }
 
         return "redirect:/staff/login";
