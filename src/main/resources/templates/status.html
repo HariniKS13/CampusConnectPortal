@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Check Status - CampusConnect</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>CampusConnect</h1>
+    <p>Sri Shakthi Institute of Engineering and Technology</p>
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/bonafide">Bonafide</a>
+    <a href="/leave">Leave</a>
+    <a href="/notices">Notices</a>
+    <a href="/status">Check Status</a>
+    <a href="/staff/login">Staff Login</a>
+</nav>
+
+<div class="container">
+
+    <h2>Check Request Status</h2>
+
+    <p>Enter your Register Number to check your request status.</p>
+
+    <form action="/status" method="post">
+
+        <label>Register Number</label>
+
+        <input
+            type="text"
+            name="regNo"
+            placeholder="Enter Register Number"
+            required>
+
+        <button type="submit">
+            Check Status
+        </button>
+
+    </form>
+
+    <div th:if="${regNo != null}">
+
+        <h2>Request Details</h2>
+
+        <div th:if="${#lists.isEmpty(requests)}">
+
+            <p>
+                No request found for Register Number:
+                <strong th:text="${regNo}"></strong>
+            </p>
+
+        </div>
+
+        <div th:each="request : ${requests}">
+
+            <hr>
+
+            <p>
+                <strong>Student Name:</strong>
+                <span th:text="${request.studentName}"></span>
+            </p>
+
+            <p>
+                <strong>Register Number:</strong>
+                <span th:text="${request.regNo}"></span>
+            </p>
+
+            <p>
+                <strong>Request Type:</strong>
+                <span th:text="${request.requestType}"></span>
+            </p>
+
+            <p>
+                <strong>Department:</strong>
+                <span th:text="${request.department}"></span>
+            </p>
+
+            <p>
+                <strong>Year:</strong>
+                <span th:text="${request.year}"></span>
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                <span th:text="${request.status}"></span>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

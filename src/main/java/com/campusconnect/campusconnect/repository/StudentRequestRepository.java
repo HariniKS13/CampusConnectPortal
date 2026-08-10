@@ -8,4 +8,6 @@ import java.util.List;
 public interface StudentRequestRepository extends JpaRepository<StudentRequest, Long> {
 
     List<StudentRequest> findByStatus(String status);
+
+    List<StudentRequest> findByRegNo(String regNo);
 }
