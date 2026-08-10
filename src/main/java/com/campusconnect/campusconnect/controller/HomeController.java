@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Objects;
@@ -122,6 +123,43 @@ public class HomeController {
     @GetMapping("/success")
     public String success() {
         return "success";
+    }
+
+    // =========================
+    // STUDENT CHECK STATUS PAGE
+    // =========================
+
+    @GetMapping("/status")
+    public String statusPage() {
+        return "status";
+    }
+
+    // =========================
+    // CHECK STUDENT STATUS
+    // =========================
+
+    @PostMapping("/status")
+    public String checkStatus(
+            @RequestParam String regNo,
+            Model model) {
+
+        List<StudentRequest> requests =
+                repository.findByRegNo(regNo);
+
+        model.addAttribute("requests", requests);
+        model.addAttribute("regNo", regNo);
+
+        return "status";
+    }
+
+    // =========================
+    // TEMPORARY STATUS TEST
+    // =========================
+
+    @GetMapping("/test-status")
+    @ResponseBody
+    public String testStatus() {
+        return "STATUS ROUTE IS WORKING";
     }
 
     // =========================
