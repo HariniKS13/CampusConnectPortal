@@ -20,15 +20,27 @@ public class HomeController {
         this.repository = repository;
     }
 
+    // =========================
+    // HOME
+    // =========================
+
     @GetMapping("/")
     public String home() {
-        return "index";
+        return "forward:/index.html";
     }
+
+    // =========================
+    // LEAVE PAGE
+    // =========================
 
     @GetMapping("/leave")
     public String leave() {
-        return "leave";
+        return "forward:/leave.html";
     }
+
+    // =========================
+    // SUBMIT LEAVE
+    // =========================
 
     @PostMapping("/leave")
     public String submitLeave(
@@ -54,13 +66,21 @@ public class HomeController {
 
         repository.save(request);
 
-        return "success";
+        return "redirect:/success";
     }
+
+    // =========================
+    // BONAFIDE PAGE
+    // =========================
 
     @GetMapping("/bonafide")
     public String bonafide() {
-        return "bonafide";
+        return "forward:/bonafide.html";
     }
+
+    // =========================
+    // SUBMIT BONAFIDE
+    // =========================
 
     @PostMapping("/bonafide")
     public String submitBonafide(
@@ -82,37 +102,51 @@ public class HomeController {
 
         repository.save(request);
 
-        return "success";
-    }
-
-    @GetMapping("/notices")
-    public String notices() {
-        return "notices";
-    }
-
-    @GetMapping("/success")
-    public String success() {
-        return "success";
+        return "redirect:/success";
     }
 
     // =========================
-    // STUDENT STATUS
+    // NOTICES
+    // =========================
+
+    @GetMapping("/notices")
+    public String notices() {
+        return "forward:/notices.html";
+    }
+
+    // =========================
+    // SUCCESS
+    // =========================
+
+    @GetMapping("/success")
+    public String success() {
+        return "forward:/success.html";
+    }
+
+    // =========================
+    // STUDENT STATUS PAGE
     // =========================
 
     @GetMapping("/status")
     public String statusPage(Model model) {
+
         model.addAttribute("requests", null);
         model.addAttribute("regNo", null);
+
         return "status";
     }
 
+    // =========================
+    // STUDENT CHECK STATUS
+    // =========================
+
     @PostMapping("/status")
     public String checkStatus(
-            @RequestParam("regNo") String regNo,
+            @RequestParam String regNo,
             Model model) {
 
         List<StudentRequest> requests =
-                repository.findByRegNo(regNo.trim());
+                repository.findByRegNo(regNo);
 
         model.addAttribute("requests", requests);
         model.addAttribute("regNo", regNo);
@@ -121,13 +155,17 @@ public class HomeController {
     }
 
     // =========================
-    // STAFF LOGIN
+    // STAFF LOGIN PAGE
     // =========================
 
     @GetMapping("/staff/login")
     public String staffLogin() {
-        return "staff-login";
+        return "forward:/staff-login.html";
     }
+
+    // =========================
+    // STAFF LOGIN
+    // =========================
 
     @PostMapping("/staff/login")
     public String staffLoginSubmit(
@@ -138,7 +176,8 @@ public class HomeController {
         String staffEmail = "dhilipkumarece@siet.ac.in";
         String staffPassword = "DilipHODVLSI@2028";
 
-        if (staffEmail.equals(email) && staffPassword.equals(password)) {
+        if (staffEmail.equals(email)
+                && staffPassword.equals(password)) {
 
             List<StudentRequest> requests =
                     repository.findByStatus("PENDING");
@@ -148,17 +187,21 @@ public class HomeController {
             return "staff-dashboard";
         }
 
-        model.addAttribute("error", "Invalid email or password");
+        model.addAttribute(
+                "error",
+                "Invalid email or password"
+        );
 
         return "staff-login";
     }
 
     // =========================
-    // APPROVE
+    // APPROVE REQUEST
     // =========================
 
     @PostMapping("/staff/approve")
-    public String approveRequest(@RequestParam("id") Long id) {
+    public String approveRequest(
+            @RequestParam long id) {
 
         StudentRequest request =
                 repository.findById(id).orElse(null);
@@ -172,11 +215,12 @@ public class HomeController {
     }
 
     // =========================
-    // REJECT
+    // REJECT REQUEST
     // =========================
 
     @PostMapping("/staff/reject")
-    public String rejectRequest(@RequestParam("id") Long id) {
+    public String rejectRequest(
+            @RequestParam long id) {
 
         StudentRequest request =
                 repository.findById(id).orElse(null);
@@ -187,5 +231,14 @@ public class HomeController {
         }
 
         return "redirect:/staff/login";
+    }
+
+    // =========================
+    // TEST ROUTE
+    // =========================
+
+    @GetMapping("/test-status")
+    public String testStatus() {
+        return "STATUS ROUTE IS WORKING";
     }
 }
