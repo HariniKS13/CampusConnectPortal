@@ -26,7 +26,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "forward:/index.html";
+        return "index";
     }
 
     // =========================
@@ -35,7 +35,7 @@ public class HomeController {
 
     @GetMapping("/leave")
     public String leave() {
-        return "forward:/leave.html";
+        return "leave";
     }
 
     // =========================
@@ -75,7 +75,7 @@ public class HomeController {
 
     @GetMapping("/bonafide")
     public String bonafide() {
-        return "forward:/bonafide.html";
+        return "bonafide";
     }
 
     // =========================
@@ -111,7 +111,7 @@ public class HomeController {
 
     @GetMapping("/notices")
     public String notices() {
-        return "forward:/notices.html";
+        return "notices";
     }
 
     // =========================
@@ -120,7 +120,7 @@ public class HomeController {
 
     @GetMapping("/success")
     public String success() {
-        return "forward:/success.html";
+        return "success";
     }
 
     // =========================
@@ -160,7 +160,7 @@ public class HomeController {
 
     @GetMapping("/staff/login")
     public String staffLogin() {
-        return "forward:/staff-login.html";
+        return "staff-login";
     }
 
     // =========================
