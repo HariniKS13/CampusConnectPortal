@@ -27,13 +27,13 @@
 
     <!-- MAIN CONTENT -->
     <main class="page-wrapper">
-        <div style="max-width: 800px; margin: 0 auto;">
+        <div style="max-width: 850px; margin: 0 auto;">
 
             <!-- SEARCH CARD -->
             <div class="form-card" style="margin-bottom: 2.5rem;">
                 <div class="form-header">
                     <h2>🔍 Track Application Status</h2>
-                    <p>Enter your College Register Number to view the live status of your Bonafide and Leave requests.</p>
+                    <p>Enter your College Register Number to view your Bonafide and Leave requests, download official PDF certificates, and check approval status.</p>
                 </div>
 
                 <form action="/status" method="post">
@@ -83,8 +83,17 @@
                 </div>
 
                 <!-- RESULTS LIST -->
-                <div th:each="req : ${requests}" class="status-card">
+                <div th:each="req : ${requests}" class="status-card" th:id="'req-card-' + ${req.id}">
                     
+                    <!-- PRINT HEADER (Visible only in PDF / Print) -->
+                    <div class="print-certificate-header">
+                        <h2>SRI SHAKTHI INSTITUTE OF ENGINEERING AND TECHNOLOGY</h2>
+                        <p>Autonomous Institution | Approved by AICTE | Affiliated to Anna University</p>
+                        <p>L&amp;T Bypass Road, Chinniyampalayam, Coimbatore - 641062</p>
+                        <hr style="margin-top: 10px; border-top: 1px solid #000;">
+                        <h3 style="margin-top: 15px; font-size: 16pt;" th:text="'OFFICIAL ' + ${req.requestType} + ' ACKNOWLEDGMENT / CERTIFICATE'"></h3>
+                    </div>
+
                     <div class="status-card-header">
                         <div style="display: flex; align-items: center; gap: 0.6rem;">
                             <span style="font-size: 1.4rem;" th:text="${req.requestType == 'LEAVE' ? '📝' : '📄'}"></span>
@@ -141,6 +150,17 @@
                         <div class="status-reason-box" th:text="${req.reason}"></div>
                     </div>
 
+                    <!-- DOWNLOAD PDF BUTTON -->
+                    <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">
+                            Application Reference ID: <strong>#CC-<span th:text="${req.id}"></span></strong>
+                        </span>
+
+                        <button type="button" class="btn btn-pdf btn-sm" th:onclick="'downloadCertificateAsPDF(' + ${req.id} + ')'">
+                            📥 Download as PDF / Print Certificate
+                        </button>
+                    </div>
+
                 </div>
 
             </div>
@@ -150,10 +170,106 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <div class="footer-bottom" style="border:none; padding:0;">
-            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>CampusConnect Portal</h4>
+                <p>Official student self-service portal for Sri Shakthi Institute of Engineering and Technology.</p>
+                <div class="footer-developer-tag">
+                    🚀 Designed &amp; Developed by <strong>Harini K S</strong> | Web Developer
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/bonafide">Apply Bonafide Certificate</a></li>
+                    <li><a href="/leave">Submit Leave Request</a></li>
+                    <li><a href="/status">Track Application Status</a></li>
+                    <li><a href="/staff/login">Faculty &amp; Staff Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>College Info</h4>
+                <p>🌐 <a href="https://www.siet.ac.in" target="_blank" style="color: #60a5fa; text-decoration: none;">www.siet.ac.in</a></p>
+                <p>📍 L&amp;T Bypass Road, Chinniyampalayam, Coimbatore - 641062</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | Web Developer: <strong>Harini K S</strong>
         </div>
     </footer>
+
+    <!-- JAVASCRIPT FOR PDF DOWNLOAD / PRINTING -->
+    <script>
+        function downloadCertificateAsPDF(cardId) {
+            const originalContents = document.body.innerHTML;
+            const printCard = document.getElementById('req-card-' + cardId);
+
+            if (!printCard) {
+                window.print();
+                return;
+            }
+
+            const printWindow = window.open('', '', 'height=800,width=800');
+            printWindow.document.write('<html><head><title>CampusConnect Official Certificate</title>');
+            printWindow.document.write('<link rel="stylesheet" href="/style.css">');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: Arial, sans-serif; padding: 40px; background: #fff; color: #000; }');
+            printWindow.document.write('.print-header { text-align: center; border-bottom: 2px solid #003366; padding-bottom: 15px; margin-bottom: 25px; }');
+            printWindow.document.write('.print-header h1 { font-size: 20px; color: #003366; margin: 0; text-transform: uppercase; }');
+            printWindow.document.write('.print-header p { font-size: 13px; color: #555; margin: 4px 0; }');
+            printWindow.document.write('.cert-title { text-align: center; font-size: 18px; font-weight: bold; margin: 25px 0; color: #111; text-decoration: underline; }');
+            printWindow.document.write('.cert-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }');
+            printWindow.document.write('.cert-table th, .cert-table td { padding: 10px 14px; border: 1px solid #ccc; text-align: left; font-size: 14px; }');
+            printWindow.document.write('.cert-table th { background: #f4f4f4; width: 35%; }');
+            printWindow.document.write('.cert-footer { margin-top: 60px; display: flex; justify-content: space-between; }');
+            printWindow.document.write('.signature-line { border-top: 1px solid #333; width: 180px; text-align: center; padding-top: 5px; font-size: 13px; font-weight: bold; }');
+            printWindow.document.write('.watermark { text-align: center; margin-top: 30px; font-size: 11px; color: #888; }');
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head><body>');
+
+            // Extract content
+            const studentName = printCard.querySelector('.status-card-grid .status-item:nth-child(1) .status-item-value')?.innerText || 'N/A';
+            const regNo = printCard.querySelector('.status-card-grid .status-item:nth-child(2) .status-item-value')?.innerText || 'N/A';
+            const department = printCard.querySelector('.status-card-grid .status-item:nth-child(3) .status-item-value')?.innerText || 'N/A';
+            const year = printCard.querySelector('.status-card-grid .status-item:nth-child(4) .status-item-value')?.innerText || 'N/A';
+            const reason = printCard.querySelector('.status-reason-box')?.innerText || 'N/A';
+            const status = printCard.querySelector('.badge-approved') ? 'APPROVED' : (printCard.querySelector('.badge-rejected') ? 'REJECTED' : 'PENDING');
+            const typeBadge = printCard.querySelector('.badge-type')?.innerText || 'APPLICATION';
+
+            printWindow.document.write('<div class="print-header">');
+            printWindow.document.write('<h1>Sri Shakthi Institute of Engineering and Technology</h1>');
+            printWindow.document.write('<p>Autonomous Institution | Approved by AICTE | Affiliated to Anna University</p>');
+            printWindow.document.write('<p>L&T Bypass Road, Chinniyampalayam, Coimbatore - 641062 | www.siet.ac.in</p>');
+            printWindow.document.write('</div>');
+
+            printWindow.document.write('<div class="cert-title">OFFICIAL ' + typeBadge + ' ACKNOWLEDGMENT</div>');
+
+            printWindow.document.write('<table class="cert-table">');
+            printWindow.document.write('<tr><th>Application Ref ID</th><td>#CC-' + cardId + '</td></tr>');
+            printWindow.document.write('<tr><th>Student Name</th><td><strong>' + studentName + '</strong></td></tr>');
+            printWindow.document.write('<tr><th>Register Number</th><td><strong>' + regNo + '</strong></td></tr>');
+            printWindow.document.write('<tr><th>Department</th><td>' + department + '</td></tr>');
+            printWindow.document.write('<tr><th>Academic Year</th><td>' + year + '</td></tr>');
+            printWindow.document.write('<tr><th>Reason / Statement</th><td>' + reason + '</td></tr>');
+            printWindow.document.write('<tr><th>Current Status</th><td><strong>' + status + '</strong></td></tr>');
+            printWindow.document.write('<tr><th>Verification Portal</th><td>CampusConnect Online Service Portal</td></tr>');
+            printWindow.document.write('</table>');
+
+            printWindow.document.write('<div class="cert-footer">');
+            printWindow.document.write('<div class="signature-line">Student Signature</div>');
+            printWindow.document.write('<div class="signature-line">HOD / Authorized Signatory</div>');
+            printWindow.document.write('</div>');
+
+            printWindow.document.write('<div class="watermark">Generated digitally via CampusConnect Portal | Web Developer: Harini K S</div>');
+
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+            }, 400);
+        }
+    </script>
 
 </body>
 </html>

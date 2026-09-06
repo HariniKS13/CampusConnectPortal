@@ -32,12 +32,12 @@
             <div class="success-icon-circle">✓</div>
             <h2>Application Submitted Successfully!</h2>
             <p>
-                Your <strong th:text="${type}"></strong> request has been successfully submitted to your Department Head. You can track the real-time approval status at any time.
+                Your <strong th:text="${type}"></strong> request has been successfully submitted to your Department Head. You can track the real-time approval status and download official PDF certificates at any time.
             </p>
 
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                 <a th:href="@{/status(regNo=${regNo})}" class="btn btn-primary">
-                    🔍 Track My Application Status
+                    🔍 Track Status &amp; Download PDF
                 </a>
                 <a href="/" class="btn btn-secondary">
                     🏠 Return to Home
@@ -49,8 +49,25 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <div class="footer-bottom" style="border:none; padding:0;">
-            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>CampusConnect Portal</h4>
+                <p>Official student self-service portal for Sri Shakthi Institute of Engineering and Technology.</p>
+                <div class="footer-developer-tag">
+                    🚀 Designed &amp; Developed by <strong>Harini K S</strong> | Web Developer
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/bonafide">Apply Bonafide Certificate</a></li>
+                    <li><a href="/leave">Submit Leave Request</a></li>
+                    <li><a href="/status">Track Application Status</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | Web Developer: <strong>Harini K S</strong>
         </div>
     </footer>
 

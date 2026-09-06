@@ -397,6 +397,46 @@ body {
     color: var(--text-muted);
 }
 
+/* Developer badge in home */
+.developer-highlight-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    padding: 1.75rem 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-md);
+}
+
+.dev-info h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dev-info p {
+    color: #94a3b8;
+    font-size: 0.92rem;
+}
+
+.dev-badge {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #ffffff;
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
 /* ==========================================================================
    Forms & Controls
    ========================================================================== */
@@ -559,6 +599,19 @@ textarea.form-control {
 
 .btn-danger:hover {
     background: #dc2626;
+}
+
+.btn-pdf {
+    background: #0284c7;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+
+.btn-pdf:hover {
+    background: #0369a1;
+    color: #ffffff;
+    transform: translateY(-2px);
 }
 
 .btn-sm {
@@ -890,12 +943,86 @@ textarea.form-control {
     padding-left: 4px;
 }
 
+.footer-developer-tag {
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(96, 165, 250, 0.3);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    margin-top: 1rem;
+    display: inline-block;
+    color: #e2e8f0;
+}
+
+.footer-developer-tag strong {
+    color: #60a5fa;
+}
+
 .footer-bottom {
     text-align: center;
     padding-top: 2rem;
     border-top: 1px solid #1e293b;
-    font-size: 0.88rem;
-    color: #64748b;
+    font-size: 0.92rem;
+    color: #94a3b8;
+}
+
+.footer-bottom strong {
+    color: #60a5fa;
+}
+
+/* ==========================================================================
+   Print / PDF Certificate Styles
+   ========================================================================== */
+
+@media print {
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    .top-header,
+    .main-nav,
+    .footer,
+    .form-card,
+    .btn,
+    .filter-bar,
+    .stats-grid {
+        display: none !important;
+    }
+
+    .page-wrapper {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .status-card {
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin: 20px 0 !important;
+        padding: 25px !important;
+    }
+
+    .print-certificate-header {
+        display: block !important;
+        text-align: center;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    .print-certificate-header h2 {
+        font-size: 20pt;
+        font-weight: bold;
+    }
+
+    .print-certificate-header p {
+        font-size: 11pt;
+        color: #333;
+    }
+}
+
+.print-certificate-header {
+    display: none;
 }
 
 /* ==========================================================================
@@ -925,5 +1052,9 @@ textarea.form-control {
     .nav-link {
         font-size: 0.85rem;
         padding: 0.5rem 0.85rem;
+    }
+    .developer-highlight-card {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
