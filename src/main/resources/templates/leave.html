@@ -1,137 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Leave Application - CampusConnect</title>
-
     <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
 
-<header>
-    <h1>CampusConnect</h1>
-    <p>Sri Shakthi Institute of Engineering and Technology</p>
-</header>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <h1>🎓 <span>CampusConnect</span> Portal</h1>
+        <p>Sri Shakthi Institute of Engineering and Technology</p>
+    </header>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/bonafide">Bonafide</a>
-    <a href="/leave">Leave</a>
-    <a href="/notices">Notices</a>
-    <a href="/status">Check Status</a>
-    <a href="/staff/login">Staff Login</a>
-</nav>
+    <!-- NAVIGATION BAR -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/bonafide" class="nav-link">📄 Bonafide Certificate</a>
+            <a href="/leave" class="nav-link active">📝 Leave Request</a>
+            <a href="/status" class="nav-link">🔍 Track Status</a>
+            <a href="/staff/login" class="nav-link btn-staff-nav">🔒 Staff Portal</a>
+        </div>
+    </nav>
 
-<main class="container">
+    <!-- MAIN CONTENT -->
+    <main class="page-wrapper">
+        <div class="page-center-container">
 
-    <h2>Leave Application Form</h2>
+            <div class="form-card">
+                <div class="form-header">
+                    <h2>📝 Student Leave Application</h2>
+                    <p>Submit your leave details for official department review and approval.</p>
+                </div>
 
-    <form action="/leave" method="post">
+                <form action="/leave" method="post" onsubmit="return validateDates()">
 
-        <label for="studentName">Student Name</label>
-        <br><br>
+                    <!-- STUDENT NAME -->
+                    <div class="form-group">
+                        <label for="studentName">Full Student Name *</label>
+                        <input type="text" id="studentName" name="studentName" class="form-control" placeholder="e.g. Harini K S" required>
+                    </div>
 
-        <input
-            type="text"
-            id="studentName"
-            name="studentName"
-            placeholder="Enter your name"
-            required>
+                    <!-- REGISTER NUMBER -->
+                    <div class="form-group">
+                        <label for="regNo">College Register / Roll Number *</label>
+                        <input type="text" id="regNo" name="regNo" class="form-control" placeholder="e.g. 714021106001" style="text-transform: uppercase;" required>
+                    </div>
 
-        <br><br>
+                    <!-- DEPARTMENT & YEAR -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Department *</label>
+                            <select id="department" name="department" class="form-control" required>
+                                <option value="">-- Select Department --</option>
+                                <option value="CSE">Computer Science &amp; Engineering (CSE)</option>
+                                <option value="IT">Information Technology (IT)</option>
+                                <option value="ECE">Electronics &amp; Communication (ECE)</option>
+                                <option value="EEE">Electrical &amp; Electronics (EEE)</option>
+                                <option value="MECH">Mechanical Engineering (MECH)</option>
+                                <option value="CIVIL">Civil Engineering (CIVIL)</option>
+                                <option value="AIDS">Artificial Intelligence &amp; Data Science (AIDS)</option>
+                                <option value="VLSI">VLSI Design &amp; Technology (VLSI)</option>
+                                <option value="BIOTECH">Biotechnology (BIOTECH)</option>
+                                <option value="AGRI">Agricultural Engineering (AGRI)</option>
+                            </select>
+                        </div>
 
-        <label for="regNo">Register Number</label>
-        <br><br>
+                        <div class="form-group">
+                            <label for="year">Academic Year *</label>
+                            <select id="year" name="year" class="form-control" required>
+                                <option value="">-- Select Year --</option>
+                                <option value="I Year">I Year (1st Year)</option>
+                                <option value="II Year">II Year (2nd Year)</option>
+                                <option value="III Year">III Year (3rd Year)</option>
+                                <option value="IV Year">IV Year (4th Year)</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <input
-            type="text"
-            id="regNo"
-            name="regNo"
-            placeholder="Enter register number"
-            required>
+                    <!-- DATES -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fromDate">From Date *</label>
+                            <input type="date" id="fromDate" name="fromDate" class="form-control" required>
+                        </div>
 
-        <br><br>
+                        <div class="form-group">
+                            <label for="toDate">To Date *</label>
+                            <input type="date" id="toDate" name="toDate" class="form-control" required>
+                        </div>
+                    </div>
 
-        <label for="department">Department</label>
-        <br><br>
+                    <!-- REASON -->
+                    <div class="form-group">
+                        <label for="reason">Reason for Leave / OD *</label>
+                        <textarea id="reason" name="reason" class="form-control" placeholder="Explain the reason for leave (e.g. Medical emergency, Family function, Technical symposium OD, Internship)" required></textarea>
+                    </div>
 
-        <select id="department" name="department" required>
-            <option value="">-- Select Department --</option>
-            <option value="CSE">CSE</option>
-            <option value="IT">IT</option>
-            <option value="ECE">ECE</option>
-            <option value="EEE">EEE</option>
-            <option value="MECH">MECH</option>
-            <option value="CIVIL">CIVIL</option>
-            <option value="AIDS">AIDS</option>
-            <option value="VLSI">VLSI</option>
-        </select>
+                    <!-- SUBMIT BUTTON -->
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary btn-block" style="padding: 0.95rem; font-size: 1.05rem;">
+                            🚀 Submit Leave Application
+                        </button>
+                    </div>
 
-        <br><br>
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <a href="/" class="btn btn-secondary btn-block">← Cancel &amp; Back to Home</a>
+                    </div>
 
-        <label for="year">Year</label>
-        <br><br>
+                </form>
+            </div>
 
-        <select id="year" name="year" required>
-            <option value="">-- Select Year --</option>
-            <option value="I Year">I Year</option>
-            <option value="II Year">II Year</option>
-            <option value="III Year">III Year</option>
-            <option value="IV Year">IV Year</option>
-        </select>
+        </div>
+    </main>
 
-        <br><br>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border:none; padding:0;">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect
+        </div>
+    </footer>
 
-        <label for="fromDate">From Date</label>
-        <br><br>
-
-        <input
-            type="date"
-            id="fromDate"
-            name="fromDate"
-            required>
-
-        <br><br>
-
-        <label for="toDate">To Date</label>
-        <br><br>
-
-        <input
-            type="date"
-            id="toDate"
-            name="toDate"
-            required>
-
-        <br><br>
-
-        <label for="reason">Reason</label>
-        <br><br>
-
-        <textarea
-            id="reason"
-            name="reason"
-            rows="5"
-            placeholder="Enter your reason"
-            required></textarea>
-
-        <br><br>
-
-        <button type="submit">
-            Submit Leave Request
-        </button>
-
-    </form>
-
-    <br>
-
-    <button type="button" onclick="window.location.href='/'">
-        Back to Home
-    </button>
-
-</main>
+    <script>
+        function validateDates() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            if (fromDate && toDate && toDate < fromDate) {
+                alert('Error: "To Date" cannot be earlier than "From Date".');
+                return false;
+            }
+            return true;
+        }
+    </script>
 
 </body>
 </html>

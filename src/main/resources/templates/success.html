@@ -1,26 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Submitted - CampusConnect</title>
+    <title>Application Submitted Successfully - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
 
-    <h1>✅ Application Submitted Successfully!</h1>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <h1>🎓 <span>CampusConnect</span> Portal</h1>
+        <p>Sri Shakthi Institute of Engineering and Technology</p>
+    </header>
 
-    <p>
-        Thank you for submitting your request.
-        Your application has been received successfully.
-    </p>
+    <!-- NAVIGATION BAR -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/bonafide" class="nav-link">📄 Bonafide Certificate</a>
+            <a href="/leave" class="nav-link">📝 Leave Request</a>
+            <a href="/status" class="nav-link">🔍 Track Status</a>
+            <a href="/staff/login" class="nav-link btn-staff-nav">🔒 Staff Portal</a>
+        </div>
+    </nav>
 
-    <br>
+    <!-- MAIN CONTENT -->
+    <main class="page-wrapper">
+        
+        <div class="success-box">
+            <div class="success-icon-circle">✓</div>
+            <h2>Application Submitted Successfully!</h2>
+            <p>
+                Your <strong th:text="${type}"></strong> request has been successfully submitted to your Department Head. You can track the real-time approval status at any time.
+            </p>
 
-    <button type="button" onclick="window.location.href='/'">
-        Back to Home
-    </button>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a th:href="@{/status(regNo=${regNo})}" class="btn btn-primary">
+                    🔍 Track My Application Status
+                </a>
+                <a href="/" class="btn btn-secondary">
+                    🏠 Return to Home
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border:none; padding:0;">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect
+        </div>
+    </footer>
 
 </body>
 </html>

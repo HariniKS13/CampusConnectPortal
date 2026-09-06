@@ -1,129 +1,192 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Staff Dashboard - CampusConnect</title>
-
     <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
 
-<header>
-    <h1>CampusConnect</h1>
-    <p>Sri Shakthi Institute of Engineering and Technology</p>
-</header>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <h1>🎓 <span>CampusConnect</span> Portal</h1>
+        <p>Sri Shakthi Institute of Engineering and Technology</p>
+    </header>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/staff/login">Staff Login</a>
-</nav>
+    <!-- NAVIGATION BAR -->
+    <nav class="main-nav">
+        <div class="nav-container" style="justify-content: space-between;">
+            <div style="display: flex; gap: 0.5rem;">
+                <a href="/" class="nav-link">🏠 Student Home</a>
+                <a href="/staff/dashboard" class="nav-link active">📊 Dashboard</a>
+            </div>
+            <div>
+                <a href="/staff/logout" class="nav-link" style="color: var(--danger); font-weight: 700;">🚪 Logout</a>
+            </div>
+        </div>
+    </nav>
 
-<main class="container">
+    <!-- MAIN CONTENT -->
+    <main class="page-wrapper">
 
-    <h1>Staff Dashboard</h1>
+        <!-- DASHBOARD HEADER -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h2 style="font-size: 2rem; font-weight: 800; color: var(--text-primary);">Faculty &amp; HOD Dashboard</h2>
+                <p style="color: var(--text-muted);" th:text="'Logged in as: ' + (${staffName} != null ? ${staffName} : 'Department Staff')"></p>
+            </div>
+            <a href="/staff/logout" class="btn btn-secondary btn-sm">Sign Out</a>
+        </div>
 
-    <h2>Pending Student Requests</h2>
+        <!-- STATS COUNTERS -->
+        <div class="stats-grid">
+            
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-blue">📋</div>
+                <div class="stat-info">
+                    <h3 th:text="${totalCount}">0</h3>
+                    <p>Total Requests</p>
+                </div>
+            </div>
 
-    <div th:if="${#lists.isEmpty(requests)}">
-        <p>No pending requests.</p>
-    </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-amber">⏳</div>
+                <div class="stat-info">
+                    <h3 th:text="${pendingCount}" style="color: var(--warning);">0</h3>
+                    <p>Pending Review</p>
+                </div>
+            </div>
 
-    <div th:each="request : ${requests}" class="card">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-green">✅</div>
+                <div class="stat-info">
+                    <h3 th:text="${approvedCount}" style="color: var(--success);">0</h3>
+                    <p>Approved Requests</p>
+                </div>
+            </div>
 
-        <hr>
-
-        <h3 th:text="${request.requestType}">
-            Request Type
-        </h3>
-
-        <p>
-            <strong>Student Name:</strong>
-            <span th:text="${request.studentName}"></span>
-        </p>
-
-        <p>
-            <strong>Register Number:</strong>
-            <span th:text="${request.regNo}"></span>
-        </p>
-
-        <p>
-            <strong>Department:</strong>
-            <span th:text="${request.department}"></span>
-        </p>
-
-        <p>
-            <strong>Year:</strong>
-            <span th:text="${request.year}"></span>
-        </p>
-
-        <p>
-            <strong>Reason:</strong>
-            <span th:text="${request.reason}"></span>
-        </p>
-
-        <div th:if="${request.requestType == 'LEAVE'}">
-
-            <p>
-                <strong>From Date:</strong>
-                <span th:text="${request.fromDate}"></span>
-            </p>
-
-            <p>
-                <strong>To Date:</strong>
-                <span th:text="${request.toDate}"></span>
-            </p>
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-red">❌</div>
+                <div class="stat-info">
+                    <h3 th:text="${rejectedCount}" style="color: var(--danger);">0</h3>
+                    <p>Rejected Requests</p>
+                </div>
+            </div>
 
         </div>
 
-        <p>
-            <strong>Status:</strong>
-            <span th:text="${request.status}"></span>
-        </p>
+        <!-- FILTER TABS -->
+        <div class="filter-bar">
+            <span style="font-weight: 700; color: var(--text-muted); font-size: 0.9rem; margin-right: 0.5rem;">Filter by:</span>
+            <a href="/staff/dashboard?filter=ALL" class="filter-tab" th:classappend="${filter == 'ALL' ? 'active' : ''}">All Requests</a>
+            <a href="/staff/dashboard?filter=PENDING" class="filter-tab" th:classappend="${filter == 'PENDING' ? 'active' : ''}">⏳ Pending (<span th:text="${pendingCount}"></span>)</a>
+            <a href="/staff/dashboard?filter=APPROVED" class="filter-tab" th:classappend="${filter == 'APPROVED' ? 'active' : ''}">✅ Approved (<span th:text="${approvedCount}"></span>)</a>
+            <a href="/staff/dashboard?filter=REJECTED" class="filter-tab" th:classappend="${filter == 'REJECTED' ? 'active' : ''}">❌ Rejected (<span th:text="${rejectedCount}"></span>)</a>
+        </div>
 
-        <br>
+        <!-- REQUESTS LIST -->
+        <div>
 
-        <!-- APPROVE -->
-        <form action="/staff/approve" method="post">
+            <!-- EMPTY STATE -->
+            <div th:if="${#lists.isEmpty(requests)}" class="status-card" style="text-align: center; padding: 3rem 1.5rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-primary);">No Requests in this View</h3>
+                <p style="color: var(--text-muted);">
+                    There are currently no student applications matching this filter.
+                </p>
+            </div>
 
-            <input
-                type="hidden"
-                name="id"
-                th:value="${request.id}">
+            <!-- CARDS -->
+            <div th:each="req : ${requests}" class="status-card">
 
-            <button type="submit">
-                Approve
-            </button>
+                <div class="status-card-header">
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <span style="font-size: 1.4rem;" th:text="${req.requestType == 'LEAVE' ? '📝' : '📄'}"></span>
+                        <div>
+                            <span class="badge badge-type" th:text="${req.requestType} + ' APPLICATION'"></span>
+                            <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem;" th:text="'Submitted: ' + (${req.appliedAt} != null ? ${req.appliedAt} : 'N/A')"></span>
+                        </div>
+                    </div>
 
-        </form>
+                    <div>
+                        <!-- STATUS BADGES -->
+                        <span th:if="${req.status == 'PENDING'}" class="badge badge-pending">
+                            ⏳ PENDING APPROVAL
+                        </span>
+                        <span th:if="${req.status == 'APPROVED'}" class="badge badge-approved">
+                            ✅ APPROVED
+                        </span>
+                        <span th:if="${req.status == 'REJECTED'}" class="badge badge-rejected">
+                            ❌ REJECTED
+                        </span>
+                    </div>
+                </div>
 
-        <br>
+                <div class="status-card-grid">
+                    <div class="status-item">
+                        <div class="status-item-label">Student Name</div>
+                        <div class="status-item-value" th:text="${req.studentName}"></div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-item-label">Register Number</div>
+                        <div class="status-item-value" th:text="${req.regNo}"></div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-item-label">Department</div>
+                        <div class="status-item-value" th:text="${req.department}"></div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-item-label">Academic Year</div>
+                        <div class="status-item-value" th:text="${req.year}"></div>
+                    </div>
+                </div>
 
-        <!-- REJECT -->
-        <form action="/staff/reject" method="post">
+                <!-- LEAVE DATES -->
+                <div th:if="${req.requestType == 'LEAVE' and req.fromDate != null}" style="margin-bottom: 1rem; background: var(--bg-card-subtle); padding: 0.75rem 1rem; border-radius: var(--radius-sm);">
+                    <strong style="color: var(--text-primary);">📅 Requested Leave Period:</strong>
+                    <span th:text="${req.fromDate}"></span> &nbsp;&rarr;&nbsp; <span th:text="${req.toDate}"></span>
+                </div>
 
-            <input
-                type="hidden"
-                name="id"
-                th:value="${request.id}">
+                <!-- REASON -->
+                <div>
+                    <div class="status-item-label">Reason / Statement of Purpose:</div>
+                    <div class="status-reason-box" th:text="${req.reason}"></div>
+                </div>
 
-            <button type="submit">
-                Reject
-            </button>
+                <!-- ACTION BUTTONS (FOR PENDING) -->
+                <div th:if="${req.status == 'PENDING'}" style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; gap: 0.75rem; justify-content: flex-end;">
+                    
+                    <!-- REJECT -->
+                    <form action="/staff/reject" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to REJECT this request?');">
+                        <input type="hidden" name="id" th:value="${req.id}">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            ❌ Reject Request
+                        </button>
+                    </form>
 
-        </form>
+                    <!-- APPROVE -->
+                    <form action="/staff/approve" method="post" style="display: inline;">
+                        <input type="hidden" name="id" th:value="${req.id}">
+                        <button type="submit" class="btn btn-success btn-sm">
+                            ✅ Approve Request
+                        </button>
+                    </form>
 
-    </div>
+                </div>
 
-    <br>
+            </div>
 
-    <button type="button" onclick="window.location.href='/'">
-        Logout
-    </button>
+        </div>
 
-</main>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border:none; padding:0;">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect Staff Portal
+        </div>
+    </footer>
 
 </body>
 </html>

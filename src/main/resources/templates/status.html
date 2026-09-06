@@ -1,293 +1,159 @@
-<!DOCTYPE html>
-<html lang="en">
-
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Check Status - CampusConnect</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Application Status - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
-
 </head>
-
 <body>
 
-<header>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <h1>🎓 <span>CampusConnect</span> Portal</h1>
+        <p>Sri Shakthi Institute of Engineering and Technology</p>
+    </header>
 
-    <h1>CampusConnect</h1>
-
-    <p>
-        Sri Shakthi Institute of Engineering and Technology
-    </p>
-
-</header>
-
-
-<nav>
-
-    <a href="/">Home</a>
-
-    <a href="/bonafide">Bonafide</a>
-
-    <a href="/leave">Leave</a>
-
-    <a href="/notices">Notices</a>
-
-    <a href="/status">Check Status</a>
-
-    <a href="/staff/login">Staff Login</a>
-
-</nav>
-
-
-<main class="container">
-
-    <h2>Check Request Status</h2>
-
-    <p>
-        Enter your Register Number to check whether
-        your application is Pending, Approved, or Rejected.
-    </p>
-
-
-    <!-- STATUS SEARCH FORM -->
-
-    <form action="/status" method="post">
-
-        <label for="regNo">
-            Register Number
-        </label>
-
-        <br><br>
-
-        <input
-            type="text"
-            id="regNo"
-            name="regNo"
-            placeholder="Enter Register Number"
-            required>
-
-        <br><br>
-
-        <button type="submit">
-            Check Status
-        </button>
-
-    </form>
-
-
-    <!-- RESULTS -->
-
-    <div th:if="${regNo != null}">
-
-        <hr>
-
-        <h2>Application Status</h2>
-
-
-        <!-- NO REQUEST -->
-
-        <div th:if="${#lists.isEmpty(requests)}">
-
-            <p>
-                No application found for Register Number:
-                <strong th:text="${regNo}"></strong>
-            </p>
-
+    <!-- NAVIGATION BAR -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/bonafide" class="nav-link">📄 Bonafide Certificate</a>
+            <a href="/leave" class="nav-link">📝 Leave Request</a>
+            <a href="/status" class="nav-link active">🔍 Track Status</a>
+            <a href="/staff/login" class="nav-link btn-staff-nav">🔒 Staff Portal</a>
         </div>
+    </nav>
 
+    <!-- MAIN CONTENT -->
+    <main class="page-wrapper">
+        <div style="max-width: 800px; margin: 0 auto;">
 
-        <!-- REQUESTS -->
+            <!-- SEARCH CARD -->
+            <div class="form-card" style="margin-bottom: 2.5rem;">
+                <div class="form-header">
+                    <h2>🔍 Track Application Status</h2>
+                    <p>Enter your College Register Number to view the live status of your Bonafide and Leave requests.</p>
+                </div>
 
-        <div th:each="request : ${requests}"
-             class="card">
-
-            <h3>
-                <span th:text="${request.requestType}">
-                    Request Type
-                </span>
-            </h3>
-
-
-            <p>
-
-                <strong>
-                    Student Name:
-                </strong>
-
-                <span th:text="${request.studentName}">
-                </span>
-
-            </p>
-
-
-            <p>
-
-                <strong>
-                    Register Number:
-                </strong>
-
-                <span th:text="${request.regNo}">
-                </span>
-
-            </p>
-
-
-            <p>
-
-                <strong>
-                    Department:
-                </strong>
-
-                <span th:text="${request.department}">
-                </span>
-
-            </p>
-
-
-            <p>
-
-                <strong>
-                    Year:
-                </strong>
-
-                <span th:text="${request.year}">
-                </span>
-
-            </p>
-
-
-            <!-- LEAVE DATES -->
-
-            <div th:if="${request.requestType == 'LEAVE'}">
-
-                <p>
-
-                    <strong>
-                        From Date:
-                    </strong>
-
-                    <span th:text="${request.fromDate}">
-                    </span>
-
-                </p>
-
-
-                <p>
-
-                    <strong>
-                        To Date:
-                    </strong>
-
-                    <span th:text="${request.toDate}">
-                    </span>
-
-                </p>
-
+                <form action="/status" method="post">
+                    <div class="form-group">
+                        <label for="regNo">Student Register / Roll Number</label>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <input
+                                type="text"
+                                id="regNo"
+                                name="regNo"
+                                class="form-control"
+                                placeholder="Enter Register Number (e.g. 714021106001)"
+                                th:value="${regNo}"
+                                style="flex: 1; min-width: 240px; text-transform: uppercase;"
+                                required>
+                            <button type="submit" class="btn btn-primary" style="padding: 0.85rem 1.75rem;">
+                                🔍 Search Status
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
 
+            <!-- SEARCH RESULTS SECTION -->
+            <div th:if="${searched}">
 
-            <p>
+                <div class="section-heading" style="text-align: left; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <h3 style="font-size: 1.4rem; font-weight: 800;">
+                            Applications for: <span style="color: var(--primary);" th:text="${regNo}"></span>
+                        </h3>
+                    </div>
+                    <span th:if="${requests != null}" class="badge badge-type" th:text="${#lists.size(requests)} + ' Application(s) Found'"></span>
+                </div>
 
-                <strong>
-                    Reason:
-                </strong>
+                <!-- NO RESULTS FOUND -->
+                <div th:if="${#lists.isEmpty(requests)}" class="status-card" style="text-align: center; padding: 3rem 1.5rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔎</div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-primary);">No Applications Found</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                        There are no submitted Bonafide or Leave requests recorded for Register Number <strong th:text="${regNo}"></strong>.
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                        <a href="/bonafide" class="btn btn-primary">Apply Bonafide</a>
+                        <a href="/leave" class="btn btn-primary">Apply Leave</a>
+                    </div>
+                </div>
 
-                <span th:text="${request.reason}">
-                </span>
+                <!-- RESULTS LIST -->
+                <div th:each="req : ${requests}" class="status-card">
+                    
+                    <div class="status-card-header">
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <span style="font-size: 1.4rem;" th:text="${req.requestType == 'LEAVE' ? '📝' : '📄'}"></span>
+                            <div>
+                                <span class="badge badge-type" th:text="${req.requestType} + ' REQUEST'"></span>
+                                <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem;" th:text="'Applied on: ' + (${req.appliedAt} != null ? ${req.appliedAt} : 'Recently')"></span>
+                            </div>
+                        </div>
 
-            </p>
+                        <div>
+                            <!-- PENDING BADGE -->
+                            <span th:if="${req.status == 'PENDING'}" class="badge badge-pending">
+                                ⏳ PENDING APPROVAL
+                            </span>
+                            <!-- APPROVED BADGE -->
+                            <span th:if="${req.status == 'APPROVED'}" class="badge badge-approved">
+                                ✅ APPROVED
+                            </span>
+                            <!-- REJECTED BADGE -->
+                            <span th:if="${req.status == 'REJECTED'}" class="badge badge-rejected">
+                                ❌ REJECTED
+                            </span>
+                        </div>
+                    </div>
 
+                    <div class="status-card-grid">
+                        <div class="status-item">
+                            <div class="status-item-label">Student Name</div>
+                            <div class="status-item-value" th:text="${req.studentName}"></div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-item-label">Register Number</div>
+                            <div class="status-item-value" th:text="${req.regNo}"></div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-item-label">Department</div>
+                            <div class="status-item-value" th:text="${req.department}"></div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-item-label">Academic Year</div>
+                            <div class="status-item-value" th:text="${req.year}"></div>
+                        </div>
+                    </div>
 
-            <!-- STATUS -->
+                    <!-- DURATION (LEAVE ONLY) -->
+                    <div th:if="${req.requestType == 'LEAVE' and req.fromDate != null}" style="margin-bottom: 1rem; background: var(--bg-card-subtle); padding: 0.75rem 1rem; border-radius: var(--radius-sm);">
+                        <strong style="color: var(--text-primary);">📅 Leave Duration:</strong>
+                        <span th:text="${req.fromDate}"></span> &nbsp;&rarr;&nbsp; <span th:text="${req.toDate}"></span>
+                    </div>
 
-            <p>
+                    <!-- REASON -->
+                    <div>
+                        <div class="status-item-label">Reason / Purpose:</div>
+                        <div class="status-reason-box" th:text="${req.reason}"></div>
+                    </div>
 
-                <strong>
-                    Application Status:
-                </strong>
-
-                <span
-                    th:text="${request.status}">
-                </span>
-
-            </p>
-
-
-            <!-- STATUS MESSAGE -->
-
-            <div th:if="${request.status == 'PENDING'}">
-
-                <p>
-                    ⏳ Your application is waiting for
-                    staff approval.
-                </p>
-
-            </div>
-
-
-            <div th:if="${request.status == 'APPROVED'}">
-
-                <p>
-                    ✅ Your application has been approved.
-                </p>
-
-            </div>
-
-
-            <div th:if="${request.status == 'REJECTED'}">
-
-                <p>
-                    ❌ Your application has been rejected.
-                </p>
+                </div>
 
             </div>
 
         </div>
+    </main>
 
-    </div>
-
-
-    <br>
-
-
-    <button
-        type="button"
-        onclick="window.location.href='/'">
-
-        Back to Home
-
-    </button>
-
-</main>
-
-
-<footer>
-
-    <p>
-        📍 L&amp;T Bypass Road,
-        Chinniyampalayam,
-        Coimbatore - 641062
-    </p>
-
-    <p>
-        🌐 www.siet.ac.in
-    </p>
-
-    <hr>
-
-    <p>
-        © 2026 SIET Smart Student Portal |
-        All Rights Reserved.
-    </p>
-
-</footer>
-
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border:none; padding:0;">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect
+        </div>
+    </footer>
 
 </body>
-
 </html>

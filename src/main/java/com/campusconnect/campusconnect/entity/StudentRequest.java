@@ -1,6 +1,8 @@
 package com.campusconnect.campusconnect.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "student_requests")
@@ -15,6 +17,8 @@ public class StudentRequest {
     private String regNo;
     private String department;
     private String year;
+
+    @Column(length = 1000)
     private String reason;
 
     private String fromDate;
@@ -22,11 +26,28 @@ public class StudentRequest {
 
     private String status;
 
+    private String appliedAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.appliedAt == null || this.appliedAt.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy hh:mm a");
+            this.appliedAt = LocalDateTime.now().format(formatter);
+        }
+        if (this.status == null || this.status.isEmpty()) {
+            this.status = "PENDING";
+        }
+    }
+
     public StudentRequest() {
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRequestType() {
@@ -99,5 +120,13 @@ public class StudentRequest {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getAppliedAt() {
+        return appliedAt;
+    }
+
+    public void setAppliedAt(String appliedAt) {
+        this.appliedAt = appliedAt;
     }
 }

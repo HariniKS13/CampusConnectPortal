@@ -1,95 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>CampusConnect - Student Service Portal</title>
-
+    <title>CampusConnect - Smart Student Service Portal</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
 
-<header>
-    <h1>CampusConnect</h1>
-    <p>Sri Shakthi Institute of Engineering and Technology</p>
-</header>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <h1>🎓 <span>CampusConnect</span> Portal</h1>
+        <p>Sri Shakthi Institute of Engineering and Technology</p>
+    </header>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/bonafide">Bonafide</a>
-    <a href="/leave">Leave</a>
-    <a href="/notices">Notices</a>
-    <a href="/status">Check Status</a>
-    <a href="/staff/login">Staff Login</a>
-</nav>
+    <!-- NAVIGATION BAR -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link active">🏠 Home</a>
+            <a href="/bonafide" class="nav-link">📄 Bonafide Certificate</a>
+            <a href="/leave" class="nav-link">📝 Leave Request</a>
+            <a href="/status" class="nav-link">🔍 Track Status</a>
+            <a href="/staff/login" class="nav-link btn-staff-nav">🔒 Staff Portal</a>
+        </div>
+    </nav>
 
-<main class="container">
+    <!-- MAIN CONTENT -->
+    <main class="page-wrapper">
 
-    <h2>Welcome Students!</h2>
+        <!-- HERO BANNER -->
+        <section class="hero-banner">
+            <div class="hero-badge">⚡ Official Student E-Services</div>
+            <h2 class="hero-title">Empowering Students with Seamless Digital Campus Services</h2>
+            <p class="hero-subtitle">
+                Apply for bonafide certificates, submit leave requests online, and track approval status in real-time without standing in queues.
+            </p>
+            <div class="hero-actions">
+                <a href="/bonafide" class="btn btn-hero-white">📄 Apply Bonafide</a>
+                <a href="/leave" class="btn btn-hero-white">📝 Request Leave</a>
+                <a href="/status" class="btn btn-hero-outline">🔍 Track My Request</a>
+            </div>
+        </section>
 
-    <p>
-        CampusConnect helps students access important college services quickly and easily.
-    </p>
-
-    <div class="cards">
-
-        <div class="card">
-            <h3>📄 Bonafide Certificate</h3>
-
-            <p>Apply online for your Bonafide Certificate.</p>
-
-            <a href="/bonafide">
-                <button type="button">Apply Now</button>
-            </a>
+        <!-- SERVICES SECTION -->
+        <div class="section-heading">
+            <h2>Campus Services & Applications</h2>
+            <p>Select a service below to submit your official request or track previous submissions</p>
         </div>
 
-        <div class="card">
-            <h3>📝 Leave Application</h3>
+        <div class="cards-grid">
 
-            <p>Submit your leave request online.</p>
+            <!-- BONAFIDE CARD -->
+            <div class="service-card">
+                <div class="service-icon">📄</div>
+                <h3>Bonafide Certificate</h3>
+                <p>Request an official bonafide certificate for passport verification, bank loans, bus passes, scholarships, or internship applications.</p>
+                <a href="/bonafide" class="btn btn-primary btn-block">Apply for Bonafide &rarr;</a>
+            </div>
 
-            <a href="/leave">
-                <button type="button">Apply Leave</button>
-            </a>
+            <!-- LEAVE APPLICATION CARD -->
+            <div class="service-card">
+                <div class="service-icon">📝</div>
+                <h3>Leave Application</h3>
+                <p>Submit digital leave requests for medical, personal, or on-duty permissions directly to your Head of Department for rapid approval.</p>
+                <a href="/leave" class="btn btn-primary btn-block">Apply for Leave &rarr;</a>
+            </div>
+
+            <!-- TRACK STATUS CARD -->
+            <div class="service-card">
+                <div class="service-icon">🔍</div>
+                <h3>Track Application Status</h3>
+                <p>Check the live approval status of all your submitted leave and bonafide requests using your College Register Number.</p>
+                <a href="/status" class="btn btn-secondary btn-block">Check Live Status &rarr;</a>
+            </div>
+
+            <!-- STAFF PORTAL CARD -->
+            <div class="service-card">
+                <div class="service-icon">👨‍🏫</div>
+                <h3>Department Staff Portal</h3>
+                <p>Secure login portal for faculty members and HODs to review, approve, or reject student requests with administrative oversight.</p>
+                <a href="/staff/login" class="btn btn-secondary btn-block">Staff Login &rarr;</a>
+            </div>
+
         </div>
 
-        <div class="card">
-            <h3>📢 College Notices</h3>
-
-            <p>View the latest announcements and circulars.</p>
-
-            <a href="/notices">
-                <button type="button">View Notices</button>
-            </a>
+        <!-- FEATURE HIGHLIGHTS -->
+        <div class="feature-box">
+            <div class="feature-item">
+                <div class="feature-item-icon">🚀</div>
+                <div class="feature-item-text">
+                    <h4>Instant Online Submission</h4>
+                    <p>Submit applications anytime, 24/7, directly from your mobile or desktop browser.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-item-icon">⚡</div>
+                <div class="feature-item-text">
+                    <h4>Real-time Status Tracking</h4>
+                    <p>Instant transparency on whether your request is Pending, Approved, or Rejected.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-item-icon">🛡️</div>
+                <div class="feature-item-text">
+                    <h4>Direct HOD Digital Approval</h4>
+                    <p>Department heads can review and process requests securely with a single click.</p>
+                </div>
+            </div>
         </div>
 
-        <div class="card">
-            <h3>🔍 Check Application Status</h3>
+    </main>
 
-            <p>Check whether your application is pending, approved, or rejected.</p>
-
-            <a href="/status">
-                <button type="button">Check Status</button>
-            </a>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>CampusConnect Portal</h4>
+                <p>Official student self-service portal for Sri Shakthi Institute of Engineering and Technology.</p>
+                <p>📍 L&amp;T Bypass Road, Chinniyampalayam, Coimbatore - 641062</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/bonafide">Apply Bonafide Certificate</a></li>
+                    <li><a href="/leave">Submit Leave Request</a></li>
+                    <li><a href="/status">Track Application Status</a></li>
+                    <li><a href="/staff/login">Faculty &amp; Staff Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>College Info</h4>
+                <p>🌐 <a href="https://www.siet.ac.in" target="_blank" style="color: #60a5fa; text-decoration: none;">www.siet.ac.in</a></p>
+                <p>📞 Phone: +91 422 2369900</p>
+                <p>✉️ Email: info@siet.ac.in</p>
+            </div>
         </div>
-
-    </div>
-
-</main>
-
-<footer>
-
-    <p>📍 L&amp;T Bypass Road, Chinniyampalayam, Coimbatore - 641062</p>
-
-    <p>🌐 www.siet.ac.in</p>
-
-    <hr>
-
-    <p>© 2026 SIET Smart Student Portal | All Rights Reserved.</p>
-
-</footer>
+        <div class="footer-bottom">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect. All Rights Reserved.
+        </div>
+    </footer>
 
 </body>
 </html>

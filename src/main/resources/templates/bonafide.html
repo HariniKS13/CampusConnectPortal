@@ -1,90 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bonafide Certificate - CampusConnect</title>
+    <title>Bonafide Certificate Application - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
 
-    <h2>Apply for Bonafide Certificate</h2>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <h1>🎓 <span>CampusConnect</span> Portal</h1>
+        <p>Sri Shakthi Institute of Engineering and Technology</p>
+    </header>
 
-    <form action="/bonafide" method="post">
+    <!-- NAVIGATION BAR -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/bonafide" class="nav-link active">📄 Bonafide Certificate</a>
+            <a href="/leave" class="nav-link">📝 Leave Request</a>
+            <a href="/status" class="nav-link">🔍 Track Status</a>
+            <a href="/staff/login" class="nav-link btn-staff-nav">🔒 Staff Portal</a>
+        </div>
+    </nav>
 
-        <label for="studentName">Student Name</label>
-        <br><br>
-        <input
-            type="text"
-            id="studentName"
-            name="studentName"
-            placeholder="Enter your name"
-            required>
-        <br><br>
+    <!-- MAIN CONTENT -->
+    <main class="page-wrapper">
+        <div class="page-center-container">
 
-        <label for="regNo">Register Number</label>
-        <br><br>
-        <input
-            type="text"
-            id="regNo"
-            name="regNo"
-            placeholder="Enter register number"
-            required>
-        <br><br>
+            <div class="form-card">
+                <div class="form-header">
+                    <h2>📄 Apply for Bonafide Certificate</h2>
+                    <p>Fill in your details accurately. Your request will be forwarded to your Department HOD.</p>
+                </div>
 
-        <label for="department">Department</label>
-        <br><br>
+                <form action="/bonafide" method="post">
 
-        <select id="department" name="department" required>
-            <option value="">-- Select Department --</option>
-            <option value="CSE">CSE</option>
-            <option value="IT">IT</option>
-            <option value="ECE">ECE</option>
-            <option value="EEE">EEE</option>
-            <option value="MECH">MECH</option>
-            <option value="CIVIL">CIVIL</option>
-            <option value="AIDS">AIDS</option>
-            <option value="VLSI">VLSI</option>
-        </select>
+                    <!-- STUDENT NAME -->
+                    <div class="form-group">
+                        <label for="studentName">Full Student Name *</label>
+                        <input type="text" id="studentName" name="studentName" class="form-control" placeholder="e.g. Harini K S" required>
+                    </div>
 
-        <br><br>
+                    <!-- REGISTER NUMBER -->
+                    <div class="form-group">
+                        <label for="regNo">College Register / Roll Number *</label>
+                        <input type="text" id="regNo" name="regNo" class="form-control" placeholder="e.g. 714021106001" style="text-transform: uppercase;" required>
+                    </div>
 
-        <label for="year">Year</label>
-        <br><br>
+                    <!-- DEPARTMENT & YEAR -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Department *</label>
+                            <select id="department" name="department" class="form-control" required>
+                                <option value="">-- Select Department --</option>
+                                <option value="CSE">Computer Science &amp; Engineering (CSE)</option>
+                                <option value="IT">Information Technology (IT)</option>
+                                <option value="ECE">Electronics &amp; Communication (ECE)</option>
+                                <option value="EEE">Electrical &amp; Electronics (EEE)</option>
+                                <option value="MECH">Mechanical Engineering (MECH)</option>
+                                <option value="CIVIL">Civil Engineering (CIVIL)</option>
+                                <option value="AIDS">Artificial Intelligence &amp; Data Science (AIDS)</option>
+                                <option value="VLSI">VLSI Design &amp; Technology (VLSI)</option>
+                                <option value="BIOTECH">Biotechnology (BIOTECH)</option>
+                                <option value="AGRI">Agricultural Engineering (AGRI)</option>
+                            </select>
+                        </div>
 
-        <select id="year" name="year" required>
-            <option value="">-- Select Year --</option>
-            <option value="I Year">I Year</option>
-            <option value="II Year">II Year</option>
-            <option value="III Year">III Year</option>
-            <option value="IV Year">IV Year</option>
-        </select>
+                        <div class="form-group">
+                            <label for="year">Academic Year *</label>
+                            <select id="year" name="year" class="form-control" required>
+                                <option value="">-- Select Year --</option>
+                                <option value="I Year">I Year (1st Year)</option>
+                                <option value="II Year">II Year (2nd Year)</option>
+                                <option value="III Year">III Year (3rd Year)</option>
+                                <option value="IV Year">IV Year (4th Year)</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <br><br>
+                    <!-- REASON / PURPOSE -->
+                    <div class="form-group">
+                        <label for="reason">Purpose / Reason for Certificate *</label>
+                        <textarea id="reason" name="reason" class="form-control" placeholder="State why you need the bonafide certificate (e.g. Passport Application, Bank Education Loan, Bus/Train Pass, Internship verification, Scholarship)" required></textarea>
+                    </div>
 
-        <label for="reason">Reason</label>
-        <br><br>
+                    <!-- SUBMIT BUTTON -->
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary btn-block" style="padding: 0.95rem; font-size: 1.05rem;">
+                            🚀 Submit Bonafide Application
+                        </button>
+                    </div>
 
-        <textarea
-            id="reason"
-            name="reason"
-            rows="5"
-            cols="40"
-            placeholder="Enter the reason"
-            required></textarea>
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <a href="/" class="btn btn-secondary btn-block">← Cancel &amp; Back to Home</a>
+                    </div>
 
-        <br><br>
+                </form>
+            </div>
 
-        <button type="submit">Submit Application</button>
+        </div>
+    </main>
 
-    </form>
-
-    <br>
-
-    <button type="button" onclick="window.location.href='/'">
-        Back to Home
-    </button>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border:none; padding:0;">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect
+        </div>
+    </footer>
 
 </body>
 </html>

@@ -1,75 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Staff Login - CampusConnect</title>
-
+    <title>Faculty & Staff Login - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-
 <body>
 
-<header>
-    <h1>CampusConnect</h1>
-    <p>Sri Shakthi Institute of Engineering and Technology</p>
-</header>
+    <!-- TOP HEADER -->
+    <header class="top-header">
+        <h1>🎓 <span>CampusConnect</span> Portal</h1>
+        <p>Sri Shakthi Institute of Engineering and Technology</p>
+    </header>
 
-<nav>
-    <a href="/">Home</a>
-    <a href="/bonafide">Bonafide</a>
-    <a href="/leave">Leave</a>
-    <a href="/notices">Notices</a>
-    <a href="/status">Check Status</a>
-    <a href="/staff/login">Staff Login</a>
-</nav>
+    <!-- NAVIGATION BAR -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/bonafide" class="nav-link">📄 Bonafide Certificate</a>
+            <a href="/leave" class="nav-link">📝 Leave Request</a>
+            <a href="/status" class="nav-link">🔍 Track Status</a>
+            <a href="/staff/login" class="nav-link btn-staff-nav active">🔒 Staff Portal</a>
+        </div>
+    </nav>
 
-<main class="container">
+    <!-- MAIN CONTENT -->
+    <main class="page-wrapper">
+        <div style="max-width: 480px; margin: 0 auto;">
 
-    <h2>Staff Login</h2>
+            <div class="form-card">
+                <div class="form-header">
+                    <div style="font-size: 2.8rem; margin-bottom: 0.5rem;">👨‍🏫</div>
+                    <h2>Faculty &amp; Staff Login</h2>
+                    <p>Department Head &amp; Faculty Approval Portal</p>
+                </div>
 
-    <p th:if="${error}" th:text="${error}"></p>
+                <!-- ERROR ALERT -->
+                <div th:if="${error}" class="alert alert-danger">
+                    <span>⚠️</span>
+                    <span th:text="${error}"></span>
+                </div>
 
-    <form action="/staff/login" method="post">
+                <form action="/staff/login" method="post">
 
-        <label for="email">Staff Email</label>
-        <br><br>
+                    <!-- EMAIL -->
+                    <div class="form-group">
+                        <label for="email">Institutional Staff Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="e.g. staff@siet.ac.in"
+                            required>
+                    </div>
 
-        <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter staff email"
-            required>
+                    <!-- PASSWORD -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Enter your portal password"
+                            required>
+                    </div>
 
-        <br><br>
+                    <!-- SUBMIT BUTTON -->
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary btn-block" style="padding: 0.95rem; font-size: 1.05rem;">
+                            🔒 Sign In to Dashboard
+                        </button>
+                    </div>
 
-        <label for="password">Password</label>
-        <br><br>
+                    <div style="margin-top: 1.25rem; text-align: center;">
+                        <a href="/" class="btn btn-secondary btn-block">← Return to Student Portal</a>
+                    </div>
 
-        <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter password"
-            required>
+                </form>
 
-        <br><br>
+            </div>
 
-        <button type="submit">
-            Login
-        </button>
+        </div>
+    </main>
 
-    </form>
-
-    <br>
-
-    <button type="button" onclick="window.location.href='/'">
-        Back to Home
-    </button>
-
-</main>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border:none; padding:0;">
+            &copy; 2026 Sri Shakthi Institute of Engineering and Technology | CampusConnect
+        </div>
+    </footer>
 
 </body>
 </html>
