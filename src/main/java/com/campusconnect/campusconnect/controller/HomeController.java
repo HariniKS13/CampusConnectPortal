@@ -31,6 +31,15 @@ public class HomeController {
     }
 
     // =========================
+    // LEGACY NOTICES REDIRECT
+    // =========================
+
+    @GetMapping("/notices")
+    public String noticesRedirect() {
+        return "redirect:/";
+    }
+
+    // =========================
     // LEAVE PAGE
     // =========================
 
