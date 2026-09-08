@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Dashboard - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
+    <!-- html2pdf Library for Instant Direct PDF Downloads -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -126,40 +128,43 @@
                 <div class="status-card-grid">
                     <div class="status-item">
                         <div class="status-item-label">Student Name</div>
-                        <div class="status-item-value" th:text="${req.studentName}"></div>
+                        <div class="status-item-value staff-student-name" th:text="${req.studentName}"></div>
                     </div>
                     <div class="status-item">
                         <div class="status-item-label">Register Number</div>
-                        <div class="status-item-value" th:text="${req.regNo}"></div>
+                        <div class="status-item-value staff-student-regno" th:text="${req.regNo}"></div>
                     </div>
                     <div class="status-item">
                         <div class="status-item-label">Department</div>
-                        <div class="status-item-value" th:text="${req.department}"></div>
+                        <div class="status-item-value staff-student-dept" th:text="${req.department}"></div>
                     </div>
                     <div class="status-item">
                         <div class="status-item-label">Academic Year</div>
-                        <div class="status-item-value" th:text="${req.year}"></div>
+                        <div class="status-item-value staff-student-year" th:text="${req.year}"></div>
                     </div>
                 </div>
 
                 <!-- LEAVE DATES -->
-                <div th:if="${req.requestType == 'LEAVE' and req.fromDate != null}" style="margin-bottom: 1rem; background: var(--bg-card-subtle); padding: 0.75rem 1rem; border-radius: var(--radius-sm);">
+                <div th:if="${req.requestType == 'LEAVE' and req.fromDate != null}" class="staff-leave-box" style="margin-bottom: 1rem; background: var(--bg-card-subtle); padding: 0.75rem 1rem; border-radius: var(--radius-sm);">
                     <strong style="color: var(--text-primary);">📅 Requested Leave Period:</strong>
-                    <span th:text="${req.fromDate}"></span> &nbsp;&rarr;&nbsp; <span th:text="${req.toDate}"></span>
+                    <span class="staff-leave-from" th:text="${req.fromDate}"></span> &nbsp;&rarr;&nbsp; <span class="staff-leave-to" th:text="${req.toDate}"></span>
                 </div>
 
                 <!-- REASON -->
                 <div>
                     <div class="status-item-label">Reason / Statement of Purpose:</div>
-                    <div class="status-reason-box" th:text="${req.reason}"></div>
+                    <div class="status-reason-box staff-student-reason" th:text="${req.reason}"></div>
                 </div>
 
                 <!-- ACTIONS FOOTER -->
                 <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
                     
-                    <div>
-                        <button type="button" class="btn btn-pdf btn-sm" th:onclick="'downloadStaffPDF(' + ${req.id} + ')'">
-                            📥 Download PDF Report
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button type="button" class="btn btn-pdf btn-sm" th:onclick="'downloadStaffDirectPDF(' + ${req.id} + ', \'' + ${req.requestType} + '\', \'' + ${req.regNo} + '\')'">
+                            📥 Download PDF
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="'printStaffReport(' + ${req.id} + ')'">
+                            🖨️ Print
                         </button>
                     </div>
 
@@ -217,64 +222,143 @@
     </footer>
 
     <script>
-        function downloadStaffPDF(cardId) {
+        function createStaffReportElement(cardId) {
             const printCard = document.getElementById('staff-card-' + cardId);
-            if (!printCard) { window.print(); return; }
+            if (!printCard) return null;
 
-            const printWindow = window.open('', '', 'height=800,width=800');
-            printWindow.document.write('<html><head><title>CampusConnect Official Record</title>');
-            printWindow.document.write('<style>');
-            printWindow.document.write('body { font-family: Arial, sans-serif; padding: 40px; background: #fff; color: #000; }');
-            printWindow.document.write('.print-header { text-align: center; border-bottom: 2px solid #003366; padding-bottom: 15px; margin-bottom: 25px; }');
-            printWindow.document.write('.print-header h1 { font-size: 20px; color: #003366; margin: 0; text-transform: uppercase; }');
-            printWindow.document.write('.print-header p { font-size: 13px; color: #555; margin: 4px 0; }');
-            printWindow.document.write('.cert-title { text-align: center; font-size: 18px; font-weight: bold; margin: 25px 0; color: #111; text-decoration: underline; }');
-            printWindow.document.write('.cert-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }');
-            printWindow.document.write('.cert-table th, .cert-table td { padding: 10px 14px; border: 1px solid #ccc; text-align: left; font-size: 14px; }');
-            printWindow.document.write('.cert-table th { background: #f4f4f4; width: 35%; }');
-            printWindow.document.write('.cert-footer { margin-top: 60px; display: flex; justify-content: space-between; }');
-            printWindow.document.write('.signature-line { border-top: 1px solid #333; width: 180px; text-align: center; padding-top: 5px; font-size: 13px; font-weight: bold; }');
-            printWindow.document.write('.watermark { text-align: center; margin-top: 30px; font-size: 11px; color: #888; }');
-            printWindow.document.write('</style>');
-            printWindow.document.write('</head><body>');
-
-            const studentName = printCard.querySelector('.status-card-grid .status-item:nth-child(1) .status-item-value')?.innerText || 'N/A';
-            const regNo = printCard.querySelector('.status-card-grid .status-item:nth-child(2) .status-item-value')?.innerText || 'N/A';
-            const department = printCard.querySelector('.status-card-grid .status-item:nth-child(3) .status-item-value')?.innerText || 'N/A';
-            const year = printCard.querySelector('.status-card-grid .status-item:nth-child(4) .status-item-value')?.innerText || 'N/A';
-            const reason = printCard.querySelector('.status-reason-box')?.innerText || 'N/A';
-            const status = printCard.querySelector('.badge-approved') ? 'APPROVED' : (printCard.querySelector('.badge-rejected') ? 'REJECTED' : 'PENDING');
+            const studentName = printCard.querySelector('.staff-student-name')?.innerText || 'N/A';
+            const regNo = printCard.querySelector('.staff-student-regno')?.innerText || 'N/A';
+            const department = printCard.querySelector('.staff-student-dept')?.innerText || 'N/A';
+            const year = printCard.querySelector('.staff-student-year')?.innerText || 'N/A';
+            const reason = printCard.querySelector('.staff-student-reason')?.innerText || 'N/A';
             const typeBadge = printCard.querySelector('.badge-type')?.innerText || 'APPLICATION';
 
-            printWindow.document.write('<div class="print-header">');
-            printWindow.document.write('<h1>Sri Shakthi Institute of Engineering and Technology</h1>');
-            printWindow.document.write('<p>Autonomous Institution | Approved by AICTE | Affiliated to Anna University</p>');
-            printWindow.document.write('<p>L&T Bypass Road, Chinniyampalayam, Coimbatore - 641062 | Department Staff Portal</p>');
-            printWindow.document.write('</div>');
+            let status = 'PENDING APPROVAL';
+            let statusColor = '#d97706';
+            if (printCard.querySelector('.badge-approved')) {
+                status = 'APPROVED';
+                statusColor = '#059669';
+            } else if (printCard.querySelector('.badge-rejected')) {
+                status = 'REJECTED';
+                statusColor = '#dc2626';
+            }
 
-            printWindow.document.write('<div class="cert-title">FACULTY VERIFICATION & APPROVAL REPORT - ' + typeBadge + '</div>');
+            const leaveBox = printCard.querySelector('.staff-leave-box');
+            let leaveRow = '';
+            if (leaveBox) {
+                const fromDate = printCard.querySelector('.staff-leave-from')?.innerText || '';
+                const toDate = printCard.querySelector('.staff-leave-to')?.innerText || '';
+                leaveRow = `<tr><th style="background:#f8fafc; padding:12px; border:1px solid #cbd5e1; text-align:left; width:35%;">Leave Duration</th><td style="padding:12px; border:1px solid #cbd5e1;">${fromDate} to ${toDate}</td></tr>`;
+            }
 
-            printWindow.document.write('<table class="cert-table">');
-            printWindow.document.write('<tr><th>Record Reference</th><td>#CC-' + cardId + '</td></tr>');
-            printWindow.document.write('<tr><th>Student Name</th><td><strong>' + studentName + '</strong></td></tr>');
-            printWindow.document.write('<tr><th>Register Number</th><td><strong>' + regNo + '</strong></td></tr>');
-            printWindow.document.write('<tr><th>Department</th><td>' + department + '</td></tr>');
-            printWindow.document.write('<tr><th>Academic Year</th><td>' + year + '</td></tr>');
-            printWindow.document.write('<tr><th>Reason / Statement</th><td>' + reason + '</td></tr>');
-            printWindow.document.write('<tr><th>Decision Status</th><td><strong>' + status + '</strong></td></tr>');
-            printWindow.document.write('</table>');
+            const certDiv = document.createElement('div');
+            certDiv.style.padding = '35px 30px';
+            certDiv.style.background = '#ffffff';
+            certDiv.style.color = '#0f172a';
+            certDiv.style.fontFamily = 'Arial, sans-serif';
+            certDiv.style.width = '750px';
+            certDiv.style.margin = '0 auto';
+            certDiv.style.border = '2px solid #003366';
+            certDiv.style.borderRadius = '8px';
 
-            printWindow.document.write('<div class="cert-footer">');
-            printWindow.document.write('<div class="signature-line">Student Signature</div>');
-            printWindow.document.write('<div class="signature-line">Faculty / HOD Signature</div>');
-            printWindow.document.write('</div>');
+            certDiv.innerHTML = `
+                <div style="text-align:center; border-bottom: 2.5px solid #003366; padding-bottom: 15px; margin-bottom: 25px;">
+                    <h2 style="margin:0 0 6px 0; color:#003366; font-size:22px; text-transform:uppercase;">
+                        Sri Shakthi Institute of Engineering and Technology
+                    </h2>
+                    <p style="margin:2px 0; font-size:12px; color:#475569;">
+                        Autonomous Institution | Approved by AICTE | Affiliated to Anna University, Chennai
+                    </p>
+                    <p style="margin:2px 0; font-size:12px; color:#475569;">
+                        L&T Bypass Road, Chinniyampalayam, Coimbatore - 641062 | Department Staff Portal
+                    </p>
+                </div>
 
-            printWindow.document.write('<div class="watermark">CampusConnect Portal | Lead Web Developer: Harini K S</div>');
+                <div style="text-align:center; margin: 20px 0;">
+                    <span style="display:inline-block; background:#eff6ff; color:#1e40af; border:1.5px solid #93c5fd; padding:6px 20px; font-size:15px; font-weight:bold; border-radius:30px; text-transform:uppercase;">
+                        FACULTY RECORD - ${typeBadge}
+                    </span>
+                </div>
 
+                <table style="width:100%; border-collapse:collapse; margin:25px 0; font-size:13.5px;">
+                    <tr>
+                        <th style="background:#f8fafc; padding:10px 14px; border:1px solid #cbd5e1; text-align:left; width:35%;">Record Reference</th>
+                        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>#CC-${cardId}</strong></td>
+                    </tr>
+                    <tr>
+                        <th style="background:#f8fafc; padding:10px 14px; border:1px solid #cbd5e1; text-align:left;">Student Name</th>
+                        <td style="padding:10px 14px; border:1px solid #cbd5e1; font-weight:bold; font-size:14.5px;">${studentName}</td>
+                    </tr>
+                    <tr>
+                        <th style="background:#f8fafc; padding:10px 14px; border:1px solid #cbd5e1; text-align:left;">Register / Roll Number</th>
+                        <td style="padding:10px 14px; border:1px solid #cbd5e1; font-weight:bold;">${regNo}</td>
+                    </tr>
+                    <tr>
+                        <th style="background:#f8fafc; padding:10px 14px; border:1px solid #cbd5e1; text-align:left;">Department</th>
+                        <td style="padding:10px 14px; border:1px solid #cbd5e1;">${department}</td>
+                    </tr>
+                    <tr>
+                        <th style="background:#f8fafc; padding:10px 14px; border:1px solid #cbd5e1; text-align:left;">Academic Year</th>
+                        <td style="padding:10px 14px; border:1px solid #cbd5e1;">${year}</td>
+                    </tr>
+                    ${leaveRow}
+                    <tr>
+                        <th style="background:#f8fafc; padding:10px 14px; border:1px solid #cbd5e1; text-align:left;">Reason / Purpose</th>
+                        <td style="padding:10px 14px; border:1px solid #cbd5e1;">${reason}</td>
+                    </tr>
+                    <tr>
+                        <th style="background:#f8fafc; padding:10px 14px; border:1px solid #cbd5e1; text-align:left;">Decision Status</th>
+                        <td style="padding:10px 14px; border:1px solid #cbd5e1;">
+                            <strong style="color:${statusColor}; font-size:14px;">${status}</strong>
+                        </td>
+                    </tr>
+                </table>
+
+                <div style="margin-top:50px; display:flex; justify-content:space-between;">
+                    <div style="border-top:1.5px solid #334155; width:200px; text-align:center; padding-top:6px; font-size:12px; font-weight:bold; color:#1e293b;">
+                        Student Signature
+                    </div>
+                    <div style="border-top:1.5px solid #334155; width:200px; text-align:center; padding-top:6px; font-size:12px; font-weight:bold; color:#1e293b;">
+                        Faculty / HOD Signature
+                    </div>
+                </div>
+
+                <div style="text-align:center; margin-top:35px; font-size:11px; color:#64748b; border-top:1px dashed #cbd5e1; padding-top:10px;">
+                    CampusConnect Portal | Lead Web Developer: <strong>Harini K S</strong>
+                </div>
+            `;
+
+            return certDiv;
+        }
+
+        function downloadStaffDirectPDF(cardId, reqType, regNo) {
+            const certElement = createStaffReportElement(cardId);
+            if (!certElement) return;
+
+            const safeFilename = `CampusConnect_StaffRecord_${reqType}_${regNo}_${cardId}.pdf`;
+
+            const opt = {
+                margin:       10,
+                filename:     safeFilename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(certElement).save();
+        }
+
+        function printStaffReport(cardId) {
+            const certElement = createStaffReportElement(cardId);
+            if (!certElement) return;
+
+            const printWindow = window.open('', '', 'height=800,width=800');
+            printWindow.document.write('<html><head><title>CampusConnect Official Report</title></head><body style="margin:20px;">');
+            printWindow.document.write(certElement.outerHTML);
             printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.focus();
-            setTimeout(() => { printWindow.print(); }, 400);
+            setTimeout(() => { printWindow.print(); }, 350);
         }
     </script>
 
