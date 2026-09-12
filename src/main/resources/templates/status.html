@@ -338,7 +338,14 @@
             const certElement = createCertificateElement(cardId);
             if (!certElement) return;
 
-            const safeFilename = `CampusConnect_${reqType}_${regNo}_${cardId}.pdf`;
+            // html2canvas needs the element to be in the DOM to render correctly.
+            // Place it off-screen, generate the PDF, then remove it.
+            certElement.style.position = 'fixed';
+            certElement.style.left = '-9999px';
+            certElement.style.top = '0';
+            document.body.appendChild(certElement);
+
+            const safeFilename = 'CampusConnect_' + reqType + '_' + regNo + '_' + cardId + '.pdf';
 
             const opt = {
                 margin:       10,
@@ -348,8 +355,9 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // Download direct PDF file
-            html2pdf().set(opt).from(certElement).save();
+            html2pdf().set(opt).from(certElement).save().then(function () {
+                document.body.removeChild(certElement);
+            });
         }
 
         // Print Dialog Function

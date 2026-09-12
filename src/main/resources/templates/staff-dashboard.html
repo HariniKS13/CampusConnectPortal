@@ -357,7 +357,13 @@
             const certElement = createStaffReportElement(cardId);
             if (!certElement) return;
 
-            const safeFilename = `CampusConnect_StaffRecord_${reqType}_${regNo}_${cardId}.pdf`;
+            // Attach off-screen so html2canvas can measure and render it
+            certElement.style.position = 'fixed';
+            certElement.style.left = '-9999px';
+            certElement.style.top = '0';
+            document.body.appendChild(certElement);
+
+            const safeFilename = 'CampusConnect_StaffRecord_' + reqType + '_' + regNo + '_' + cardId + '.pdf';
 
             const opt = {
                 margin:       10,
@@ -367,7 +373,9 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            html2pdf().set(opt).from(certElement).save();
+            html2pdf().set(opt).from(certElement).save().then(function () {
+                document.body.removeChild(certElement);
+            });
         }
 
         function printStaffReport(cardId) {
