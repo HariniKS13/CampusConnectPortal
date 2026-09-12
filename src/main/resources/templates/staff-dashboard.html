@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Dashboard - CampusConnect</title>
     <link rel="stylesheet" href="/style.css">
-    <!-- html2pdf Library for Instant Direct PDF Downloads -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- jsPDF for direct PDF generation (no html2canvas, no blank pages) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -354,28 +354,108 @@
         }
 
         function downloadStaffDirectPDF(cardId, reqType, regNo) {
-            const certElement = createStaffReportElement(cardId);
-            if (!certElement) return;
+            var card = document.getElementById('staff-card-' + cardId);
+            if (!card) return;
 
-            // Attach off-screen so html2canvas can measure and render it
-            certElement.style.position = 'fixed';
-            certElement.style.left = '-9999px';
-            certElement.style.top = '0';
-            document.body.appendChild(certElement);
+            var studentName = (card.querySelector('.staff-student-name')   ? card.querySelector('.staff-student-name').innerText   : 'N/A').trim();
+            var regNoVal    = (card.querySelector('.staff-student-regno')  ? card.querySelector('.staff-student-regno').innerText  : 'N/A').trim();
+            var dept        = (card.querySelector('.staff-student-dept')   ? card.querySelector('.staff-student-dept').innerText   : 'N/A').trim();
+            var year        = (card.querySelector('.staff-student-year')   ? card.querySelector('.staff-student-year').innerText   : 'N/A').trim();
+            var reason      = (card.querySelector('.staff-student-reason') ? card.querySelector('.staff-student-reason').innerText : 'N/A').trim();
+            var typeBadge   = (card.querySelector('.badge-type')           ? card.querySelector('.badge-type').innerText           : 'APPLICATION').trim();
 
-            const safeFilename = 'CampusConnect_StaffRecord_' + reqType + '_' + regNo + '_' + cardId + '.pdf';
+            var status = 'PENDING APPROVAL';
+            if (card.querySelector('.badge-approved'))   status = 'APPROVED';
+            else if (card.querySelector('.badge-rejected')) status = 'REJECTED';
 
-            const opt = {
-                margin:       10,
-                filename:     safeFilename,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            var fromDate = '', toDate = '';
+            if (card.querySelector('.staff-leave-from')) {
+                fromDate = (card.querySelector('.staff-leave-from').innerText || '').trim();
+                toDate   = (card.querySelector('.staff-leave-to') ? card.querySelector('.staff-leave-to').innerText : '').trim();
+            }
 
-            html2pdf().set(opt).from(certElement).save().then(function () {
-                document.body.removeChild(certElement);
+            var doc = new window.jspdf.jsPDF('p', 'mm', 'a4');
+            var pw = 210, mg = 18, cw = pw - 2 * mg;
+
+            // ── College Header ──────────────────────────────────────────
+            doc.setFontSize(13); doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 51, 102);
+            doc.text('Sri Shakthi Institute of Engineering and Technology', pw / 2, 22, { align: 'center' });
+
+            doc.setFontSize(8.5); doc.setFont('helvetica', 'normal');
+            doc.setTextColor(71, 85, 105);
+            doc.text('Autonomous Institution | Approved by AICTE | Affiliated to Anna University, Chennai', pw / 2, 29, { align: 'center' });
+            doc.text('L&T Bypass Road, Chinniyampalayam, Coimbatore - 641062 | Department Staff Portal', pw / 2, 34, { align: 'center' });
+
+            doc.setDrawColor(0, 51, 102); doc.setLineWidth(0.6);
+            doc.line(mg, 38, pw - mg, 38);
+
+            // ── Document Type Label ─────────────────────────────────────
+            doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+            doc.setTextColor(30, 64, 175);
+            doc.text('FACULTY RECORD - ' + typeBadge, pw / 2, 48, { align: 'center' });
+
+            // ── Table Data ──────────────────────────────────────────────
+            var rows = [
+                ['Record Reference',       '#CC-' + cardId],
+                ['Student Name',           studentName],
+                ['Register / Roll Number', regNoVal],
+                ['Department',             dept],
+                ['Academic Year',          year]
+            ];
+            if (fromDate) rows.push(['Leave Duration', fromDate + ' to ' + toDate]);
+            rows.push(['Reason / Purpose', reason]);
+            rows.push(['Decision Status',  status]);
+
+            var y = 57, c1 = 65, c2 = cw - c1;
+            doc.setFontSize(9.5);
+
+            rows.forEach(function (row) {
+                var lines = doc.splitTextToSize(row[1], c2 - 6);
+                var rh = Math.max(10, lines.length * 5.5 + 4);
+
+                // Label cell
+                doc.setFillColor(248, 250, 252);
+                doc.rect(mg, y, c1, rh, 'F');
+                doc.setDrawColor(203, 213, 225); doc.setLineWidth(0.25);
+                doc.rect(mg, y, c1, rh);
+                doc.setFont('helvetica', 'bold'); doc.setTextColor(15, 23, 42);
+                doc.text(row[0], mg + 3, y + 6.5);
+
+                // Value cell
+                doc.setFillColor(255, 255, 255);
+                doc.rect(mg + c1, y, c2, rh, 'F');
+                doc.rect(mg + c1, y, c2, rh);
+
+                if (row[0] === 'Decision Status') {
+                    doc.setFont('helvetica', 'bold');
+                    if (status === 'APPROVED')      doc.setTextColor(5, 150, 105);
+                    else if (status === 'REJECTED') doc.setTextColor(220, 38, 38);
+                    else                            doc.setTextColor(217, 119, 6);
+                } else {
+                    doc.setFont('helvetica', 'normal'); doc.setTextColor(15, 23, 42);
+                }
+                doc.text(lines, mg + c1 + 3, y + 6.5);
+                y += rh;
             });
+
+            // ── Signatures ──────────────────────────────────────────────
+            y += 14;
+            doc.setDrawColor(51, 65, 85); doc.setLineWidth(0.4);
+            doc.line(mg, y, mg + 48, y);
+            doc.line(pw - mg - 48, y, pw - mg, y);
+            doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 41, 59);
+            doc.text('Student Signature',       mg + 24,        y + 5, { align: 'center' });
+            doc.text('Faculty / HOD Signature', pw - mg - 24,   y + 5, { align: 'center' });
+
+            // ── Footer ───────────────────────────────────────────────────
+            y += 16;
+            doc.setDrawColor(203, 213, 225); doc.setLineWidth(0.2);
+            doc.setLineDash([2, 2]); doc.line(mg, y, pw - mg, y); doc.setLineDash([]);
+            doc.setFontSize(7.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 116, 139);
+            doc.text('CampusConnect Portal | Lead Web Developer: Harini K S', pw / 2, y + 6, { align: 'center' });
+
+            doc.save('CampusConnect_StaffRecord_' + reqType + '_' + regNoVal + '_' + cardId + '.pdf');
         }
 
         function printStaffReport(cardId) {
