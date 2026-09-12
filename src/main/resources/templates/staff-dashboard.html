@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -160,10 +160,14 @@
                 <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
                     
                     <div style="display: flex; gap: 0.5rem;">
-                        <button type="button" class="btn btn-pdf btn-sm" th:onclick="'downloadStaffDirectPDF(' + ${req.id} + ', \'' + ${req.requestType} + '\', \'' + ${req.regNo} + '\')'">
+                        <button type="button" class="btn btn-pdf btn-sm staff-pdf-download-btn"
+                                th:data-cardid="${req.id}"
+                                th:data-reqtype="${req.requestType}"
+                                th:data-regno="${req.regNo}">
                             📥 Download PDF
                         </button>
-                        <button type="button" class="btn btn-secondary btn-sm" th:onclick="'printStaffReport(' + ${req.id} + ')'">
+                        <button type="button" class="btn btn-secondary btn-sm staff-pdf-print-btn"
+                                th:data-cardid="${req.id}">
                             🖨️ Print
                         </button>
                     </div>
@@ -222,6 +226,24 @@
     </footer>
 
     <script>
+        // Wire up buttons via data-* attributes (avoids Thymeleaf th:onclick parsing errors)
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.staff-pdf-download-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    downloadStaffDirectPDF(
+                        btn.getAttribute('data-cardid'),
+                        btn.getAttribute('data-reqtype'),
+                        btn.getAttribute('data-regno')
+                    );
+                });
+            });
+            document.querySelectorAll('.staff-pdf-print-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    printStaffReport(btn.getAttribute('data-cardid'));
+                });
+            });
+        });
+
         function createStaffReportElement(cardId) {
             const printCard = document.getElementById('staff-card-' + cardId);
             if (!printCard) return null;

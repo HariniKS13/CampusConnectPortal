@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -150,10 +150,14 @@
                         </span>
 
                         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                            <button type="button" class="btn btn-pdf btn-sm" th:onclick="'downloadDirectPDF(' + ${req.id} + ', \'' + ${req.requestType} + '\', \'' + ${req.regNo} + '\')'">
+                            <button type="button" class="btn btn-pdf btn-sm pdf-download-btn"
+                                    th:data-cardid="${req.id}"
+                                    th:data-reqtype="${req.requestType}"
+                                    th:data-regno="${req.regNo}">
                                 📥 Download PDF File
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm" th:onclick="'printCertificateWindow(' + ${req.id} + ')'">
+                            <button type="button" class="btn btn-secondary btn-sm pdf-print-btn"
+                                    th:data-cardid="${req.id}">
                                 🖨️ Print
                             </button>
                         </div>
@@ -198,6 +202,23 @@
 
     <!-- JAVASCRIPT FOR DIRECT PDF FILE DOWNLOAD & PRINT -->
     <script>
+        // Wire up buttons using data-* attributes to avoid Thymeleaf th:onclick issues
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.pdf-download-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    downloadDirectPDF(
+                        btn.getAttribute('data-cardid'),
+                        btn.getAttribute('data-reqtype'),
+                        btn.getAttribute('data-regno')
+                    );
+                });
+            });
+            document.querySelectorAll('.pdf-print-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    printCertificateWindow(btn.getAttribute('data-cardid'));
+                });
+            });
+        });
         function createCertificateElement(cardId) {
             const card = document.getElementById('req-card-' + cardId);
             if (!card) return null;
